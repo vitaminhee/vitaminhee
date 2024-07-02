@@ -9,6 +9,7 @@ public class ImageDeleteService implements Service {
 
 	private BoardDAO dao;
 	
+	
 	// dao setter(집어놓)
 	public void setDAO(DAO dao) {
 		this.dao = (BoardDAO) dao; // 자식 class이므로 캐스팅

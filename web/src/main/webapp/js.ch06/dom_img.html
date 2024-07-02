@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.btn:hover {
+	cursor: pointer;
+	opacity: 0.5;
+}
+.btn, .btn > img {
+	float: left;
+	width: 80px; height: 80px;
+	margin: 10px;
+}
+#disply, #disply > img {
+	width: 400px;
+}
+hr {
+	clear: both;
+}
+</style>
+<script type="text/javascript">
+// 작은 작은 이미지를 클릭하면 해당 이미지가 큰 이미지에 나타나는 프로그램 작성
+function changeImage(imgObj){
+	// 큰이미지의 src에 작은이미지(imgObj)의 src를 넣는다.
+	document.getElementById("bigImage").src = imgObj.src;
+}
+</script>
+</head>
+<body>
+<div class="btn">
+	<img src="/img/cat01.jpg" onmouseover="changeImage(this)">
+</div>
+<div class="btn">
+	<img src="/img/cat02.jpg" onmouseover="changeImage(this)">
+</div>
+<div class="btn">
+	<img src="/img/cat03.jpg" onclick="changeImage(this)">
+</div>
+<div class="btn">
+	<img src="/img/cat04.jpg" onclick="changeImage(this)">
+</div>
+<hr>
+<div id = "disply"><img src="/img/cat01.jpg" id="bigImage"></div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>폼태그 데이터 처리</title>
+<!-- 라이브러리 등록 -->
+<!-- 라이브러리 필요하다. 웹라이브러리(js 라이브러리)
+	1. 다운로드 : jquery.com : 내 서버에 파일을 둔다.
+	2. CDN(Content Delivery Network) - 배달 받는 방식 사용. -->
+<!-- Boostrap(디자인의 표준화) : jquery(동작의 표준화) 포함. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="text/javascript">
+   $(function() {
+	   
+	   
+	// ***************초깃값 세팅]****************
+	//카테고리 초깃값 세팅
+	$("#category").val("mouse");
+	      
+
+      // ***************[이벤트 처리]****************
+      // 제목 입력 실시간 처리
+      $("#title").keyup(function() {
+         // 콘솔에 입력된 데이터를 찍어보자. input/select/textarea 데이터 가져오는 val() 함수
+         let title = $(this).val();
+         console.log("title =" + title);
+         console.log("title.length=" + title.length);
+         if (title.length == 0)
+            $("#title_msg").text("필수 입력 입니다.").css("color", "red");
+         // else if(title.length > 100)$("#title_msg").text("100자 이내로 입력하셔야 합니다.").css("color","red");
+         else if (title.length < 3)
+            $("#title_msg").text("3자 이상 입력하셔야 합니다.").css("color", "orange");
+         else
+            $("#title_msg").text("사용 가능한 데이터 입니다.").css("color", "blue");
+         
+      }); // $("#title").keyup의 끝
+      
+      // 내용 입력 실시간 처리. 따로따로
+      $("#content").keyup(function() {
+    	  
+    	// content 단
+    	let content = $(this).val();
+          if (content.length == 0)
+             $("#content_msg").text("필수 입력 입니다.").css("color", "red");
+          else if (content.length < 3)
+             $("#content_msg").text("3자 이상 입력하셔야 합니다.").css("color", "orange");
+          else
+             $("#content_msg").text("사용 가능한 데이터 입니다.").css("color", "blue");
+      }); //$("#content").keyup의 끝
+      
+      // category 실시간 이벤트 처리. 값이 바뀌면 동작
+      $("#category").change(function() {
+    	  console.log($(this).val()); //값을 찍
+		
+	});// $("#category").change의 끝
+	
+	 // image 실시간 이벤트 처리. 값이 바뀌면 동작. 문자열로 나옴
+    $("#file1").change(function() {
+    	let fileName = $(this).val();
+  	  console.log("fileName=" + fileName); //값을 찍
+  	//substring - 잘라내기.
+  	  let ext = fileName.substring(fileName.lastIndexOf(".")+1).toUpperCase();
+  	console.log("ext="+ ext);
+  	
+  	//이미지 확인하는 프로그램 작성
+	//이미지 - 확장자 : JPG, JPEG, PNG, GIF
+	//|| or, && and
+    if(ext=="JPG"||ext=="JPEG"||ext=="PNG"||ext=="GIF") //배열이 JPG가 맞는지 조건문
+      $("#file1_msg").text("이미지 파일입니다.").css("color", "blue");
+  	//<div id="file1_msg" style="color:red">이미지파일은 필수입력입니다.</div>를 참고해서 id를 가져오고
+  	else if (ext =="") //파일을 업로드 취소할 경우. ext.length==0과 동일
+  		$("#file1_msg").text("이미지 파일은 필수입력입니다.").css("color", "red");
+         else
+            $("#file1_msg").html("이미지 파일이 아닙니다.<br>이미지 확장명은 JPG, JPEG, PNG, GIF입니다.")
+            .css("color", "orange");
+  	//html이므로 줄바꿈인 br 태그가 적용됨.
+	});// $("#category").change의 끝
+
+   });
+</script>
+</head>
+<body>
+<form action="write.do" method="post" enctype="multipart/form-data">
+	<table>
+		<tr>
+			<th>제목</th>
+			<td>
+			<!-- .val() - value 속성의 값을 가져온다 -->
+				<input id="title" name="title" maxlength="100">
+				<!--  maxlength="100" 최대 입력 글자 -->
+				<div id="title_msg" style="color:red">내용은 필수입력입니다.</div>
+			</td>
+		</tr>
+		
+		<tr>
+			<th>내용</th>
+			<td>
+			<!--  .val() - tag 사이에 데이터를 가져온다. -->
+				<textarea id="content" name="content"></textarea>
+				<div id="content_msg" style="color:red">필수입력입니다.</div>
+			</td>
+		</tr>
+		
+		
+		<tr>
+			<th>카테고리</th>
+			<td>
+			<!--  .val() - tag 사이에 데이터를 가져온다. -->
+			<!--  값이 변하면 -->
+				<select id="category" name="category">
+				<option>computer</option>
+				<option>monitor</option>
+				<option >keyboard</option>
+				<option>mouse</option>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<th>이미지파일</th>
+			<td>
+			<!-- .val() - value 속성의 값을 가져온다 -->
+				<input id="file1" name="file1" type="file" >
+				<div id="file1_msg" style="color:red">이미지파일은 필수입력입니다.</div>
+			</td>
+		</tr>
+		
+	</table>
+</form>
+</body>
+</html>

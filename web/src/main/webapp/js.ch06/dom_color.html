@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+#disply {
+	background: yellow;
+	width: 600px;
+	height: 400px;
+}
+.btn {
+	width: 50px;
+	height: 50px;
+	float: left;
+	margin: 10px;
+}
+div {
+	border: 1px solid #444;
+}
+.btn:hover {
+	cursor: pointer;
+	opacity: 0.5;
+}
+</style>
+<script type="text/javascript">
+// 작은 박스를 클릭하면 큰 박스의 배경색이 바뀌는 프로그램 작성
+function changeBackground(color){
+	// alert(color);
+	document.getElementById("disply").style.background = color
+}
+// 작은 박스를 클릭하면 큰 박스의 배경색이 바뀌는 프로그램 작성
+function changeBackgroundObj(obj){
+	// alert(color);
+// 	document.getElementById("disply").style.background
+// 	= obj.style.background;
+// 	document.getElementById("disply").style.background
+// 	= obj.innerHTML;
+	document.getElementById("disply").style.background
+	= obj.id;
+}
+</script>
+</head>
+<body>
+<div id = "disply"></div>
+<hr>
+<div id="red" class="btn" style="background: red"
+ onclick="changeBackgroundObj(this)">red</div>
+<div id="blue" class="btn" style="background: blue"
+ onclick="changeBackgroundObj(this)">blue</div>
+<div id="green" class="btn" style="background: green"
+ onclick="changeBackgroundObj(this)">green</div>
+<div id="ogrange" class="btn" style="background: orange"
+ onclick="changeBackground('orange')">orange</div>
+</body>
+</html>

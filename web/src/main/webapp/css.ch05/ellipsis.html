@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.ellipsis{
+	width: 300px;
+	border : 1px solid #444;
+	
+	/* ellipsis 속성 지정 */
+	white-space: nowrap; /* 단어(공백 사이 글자) 보호 */
+	overflow: hidden; /* 박스 데이터의 넘치는 경우 보이지 않게 */
+	text-overflow: ellipsis; /* 글자 데이터의 넘치는 경우 말줄임 표 지정 */
+}
+</style>
+</head>
+<body>
+<h1 class="ellipsis">Lorem ipsum odlor sit amt, consectetur / Lorem ipsum odlor sit amt, consectetur</h1>
+<p class="ellipsis">Lorem ipsum odlor sit amt, consectetur / Lorem ipsum odlor sit amt, consectetur</p>
+</body>
+</html>

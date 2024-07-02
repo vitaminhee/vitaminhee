@@ -179,8 +179,9 @@ public class ImageDAO extends DAO{
 	} // end of increase()
 	
 	
-	// 4. 이미지 수정 처리
-	// BoardController - (Execute) - BoardViewService - [BoardDAO.update()]
+	// 4. 글 수정 처리
+	// 이미지를 제외한 것
+	// ImageController - (Execute) - BoardViewService - [BoardDAO.update()]
 	public int update(BoardVO vo) throws Exception{
 		// 결과를 저장할 수 있는 변수 선언.
 		int result = 0;

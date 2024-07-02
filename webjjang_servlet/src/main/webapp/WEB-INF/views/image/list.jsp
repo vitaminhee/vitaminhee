@@ -28,8 +28,8 @@ $(function(){
 	// 이벤트 처리
 	$(".dataRow").click(function(){
 		// alert("click");
-		// 글번호 필요 - 수집
-		let no = $(this).find(".no").text();
+		// 글 번호 필요 - 수집
+		let no = $(this).find(".no").text(); // 안에 있는 걸 찾는..
 		console.log("no = " + no);
 		location="view.do?no=" + no + "&inc=1&${pageObject.pageQuery}";
 	});

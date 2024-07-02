@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 글보기</title>
+<title>이미지 게시판 글보기</title>
 </head>
 <body>
 <div class="container">
-	<h1>일반 게시판 글보기</h1>
+	<h1>image view</h1>
 	<table class="table">
 		<!-- tr : table row - 테이블 한줄 -->
 		<!-- 게시판 데이터의 제목 -->

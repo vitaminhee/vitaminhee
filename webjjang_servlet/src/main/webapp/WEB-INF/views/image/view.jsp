@@ -18,6 +18,7 @@
 			  </div>
 			  <div class="card-body">
 			  <div class="card" style="width:100%">
+			   
 			  <img class="card-img-top" src="${vo.fileName }" alt="image">
 					<div class="card-img-overlay">
 					<c:if test="${login.id == vo.id }"> <!-- 로그인 처리가 되어야만 볼 수 있다. -->
@@ -43,12 +44,22 @@
 		<form action="changeImage.do" method="post" enctype="multipart/form-data">
 		<!-- 숨겨서 넘겨야 할 데이터 - 이미지 번호, 현재 파일이름(삭제해야할 파일 이름) -->
 		<input name="no" value="${vo.no }" type="hidden">
+		
+		<!-- 페이지 정보도 넘긴다. -->
+		<input name="page" value="${param.page }" type="hidden">
+		<input name="perPageNum" value="${param.perPageNum }" type="hidden">
+		<input name="key" value="${param.key }" type="hidden">
+		<input name="word" value="${param.word }" type="hidden">	
+			
+		<!-- delete filename은 만들지않음!! -->
 		<input name="deleteFileName" value="${vo.fileName }" type="hidden">
 		      <!-- Modal body -->
 		      <div class="modal-body">
 				       <div class="form-group">
-					    <label for="imagefile">첨부 이미지</label>
-					    <input id="imagefile" name="imagefile" required 
+				       <!-- 이 부분의 id와 fileName = multi.getFilesystemName("imageFile");
+				       이 부분이 동일해야 이미지를 변경할 때 잘 나옴!! -->
+					    <label for="imageFile">첨부 이미지</label>
+					    <input id="imageFile" name="imageFile" required 
 							class="form-control" type="file">
 						</div>
 		      </div>

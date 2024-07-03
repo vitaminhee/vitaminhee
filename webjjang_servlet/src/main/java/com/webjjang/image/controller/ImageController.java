@@ -1,25 +1,19 @@
 package com.webjjang.image.controller;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import com.webjjang.board.service.BoardDeleteService;
-import com.webjjang.board.service.BoardListService;
-import com.webjjang.board.service.BoardUpdateService;
-import com.webjjang.board.service.BoardViewService;
-import com.webjjang.board.service.BoardWriteService;
 import com.webjjang.board.vo.BoardVO;
 import com.webjjang.image.vo.ImageVO;
 import com.webjjang.main.controller.Init;
 import com.webjjang.member.vo.LoginVO;
 import com.webjjang.util.page.PageObject;
-import com.webjjang.util.page.ReplyPageObject;
 import com.webjjang.util.exe.Execute;
 
 // Board Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
@@ -126,6 +120,8 @@ public class ImageController {
 				// 이미지 업로드 처리
 				// MutipartRequest(request, 실제 저장위치, 사이즈 제한 , encoding, 중복처리 객체);
 				// 중복 처리 객체는 파일 이름 뒤에 cnt를 붙임. 1,2,3,4..
+				// 파일 객체 업로드 시 input의 name이 같으면 한 개만 처리 가능한게 단점뿡. 
+				// 이름을 다르게 해서 올려야 함. - file1, file2...
 				MultipartRequest multi = 
 						new MultipartRequest(request, realSavePath, sizeLimit ,
 								"utf-8", new DefaultFileRenamePolicy());
@@ -210,6 +206,7 @@ public class ImageController {
 				httpsession.setAttribute("msg", "글 수정 완료!");
 				
 				break;
+				
 			case "/image/delete.do":
 				System.out.println("5.이미지 게시판 글삭제");
 				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글번호, 비밀번호 - BoardVO
@@ -232,8 +229,58 @@ public class ImageController {
 				httpsession.setAttribute("msg", "글 삭제 완료!");
 				
 				break;
-			case "0":
 				
+				
+			case "/image/changeImage.do":
+				System.out.println("6.이미지 바꾸기 처리");
+				
+				// file upload cos - MultipartRequest
+				// 이미지 업로드 처리
+				// MutipartRequest(request, 실제 저장위치, 사이즈 제한 , encoding, 중복처리 객체);
+				// 중복 처리 객체는 파일 이름 뒤에 cnt를 붙임. 1,2,3,4..
+				// 파일 객체 업로드 시 input의 name이 같으면 한 개만 처리 가능한게 단점뿡. 
+				// 이름을 다르게 해서 올려야 함. - file1, file2...
+				 multi = 
+						new MultipartRequest(request, realSavePath, sizeLimit ,
+								"utf-8", new DefaultFileRenamePolicy());
+				
+				// 데이터 수집(사용자->서버 : form - input - name)
+				 System.out.println("여기까지---- " );
+				no = Long.parseLong(multi.getParameter("no"));
+				fileName = multi.getFilesystemName("imageFile");
+				System.out.println(fileName);
+				
+				//
+				String deleteFileName = multi.getParameter("deleteFileName");
+				
+				
+				// 변수 - vo 저장하고 Service : DB에 처리할 데이터만 표시
+				vo = new ImageVO();
+				vo.setNo(no);
+				vo.setFileName(savePath + "/" + fileName);
+				
+				
+				// DB 적용하는 처리문 작성. BoardUpdateservice
+				Execute.execute(Init.get(uri), vo);
+				
+				// 지난 이미지 파일은 존재하면 지운다.
+				File deleteFile = new File(request.getServletContext().getRealPath(deleteFileName));
+				if(deleteFile.exists()) deleteFile.delete();
+				// 파일 객체에 해당
+				// 삭제하면 boolean type - true,false
+				
+				// 처리 결과 메시지 전달
+				session.setAttribute("msg", "이미지 바꾸기에 성공하셨습니다!");
+				
+				// 페이지 정보 받기 & uri에 붙이기
+				pageObject = PageObject.getInstance(request);
+				// 글보기로 자동 이동 -> jsp 정보를 작성해서 넘긴다.
+				jsp = "redirect:view.do?no=" + no 
+						+ "&" + pageObject.getPageQuery();
+				//httpsession.setAttribute("msg", "글 수정 완료!");
+				
+				break;
+			
 			default:
 				System.out.println("####################################");;
 				System.out.println("## 잘못된 메뉴를 선택하셨습니다.          ##");;

@@ -165,23 +165,22 @@ public class ImageController {
 				
 				
 			case "/image/updateForm.do":
-				System.out.println("4-1.이미지 게시판 수정 폼");
+				System.out.println("4-1.이미지 수정 폼");
 				
 				// 사 -> 서버 : 글번호
 				no = Long.parseLong(request.getParameter("no"));
 				
 				// no맞는 데이터 DB에서 가져온다. BoardViewService
-				result = Execute.execute(Init.get("/image/view.do"),
-						new Long[]{no, 0L});
+				result = Execute.execute(Init.get("/image/view.do"), no); //uri과 service가 달라서 강제 캐스팅
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
 				
-				// jsp 정보
-				jsp = "board/updateForm";
+				// jsp 정보. 정보를 왜 안 담냐 민희야!!!
+				jsp = "image/updateForm";
 				
 				break;
 			case "/image/update.do":
-				System.out.println("4-2.이미지 게시판 글수정 처리");
+				System.out.println("4-2.이미지 게시판 수정 처리");
 				
 				// 데이터 수집(사용자->서버 : form - input - name)
 				no = Long.parseLong(request.getParameter("no"));
@@ -193,17 +192,21 @@ public class ImageController {
 				vo.setNo(no);
 				vo.setTitle(title);
 				vo.setContent(content);
+				vo.setId(id); // session의 로그인 정보에서 꺼낸다. 위쪽의 코드 참고
 				
 				
-				// DB 적용하는 처리문 작성. BoardUpdateservice
+				// DB 적용하는 처리문 작성. ImageUpdateservice
 				Execute.execute(Init.get(uri), vo);
+				
+				// 처리결과 메시지 처리
+				session.setAttribute("msg", "이미지 게시판 정보가 수정되었습니다.");
 				
 				// 페이지 정보 받기 & uri에 붙이기
 				pageObject = PageObject.getInstance(request);
 				// 글보기로 자동 이동 -> jsp 정보를 작성해서 넘긴다.
 				jsp = "redirect:view.do?no=" + no + "&inc=0"
 						+ "&" + pageObject.getPageQuery();
-				httpsession.setAttribute("msg", "글 수정 완료!");
+				
 				
 				break;
 				
@@ -245,7 +248,7 @@ public class ImageController {
 								"utf-8", new DefaultFileRenamePolicy());
 				
 				// 데이터 수집(사용자->서버 : form - input - name)
-				 System.out.println("여기까지---- " );
+				 //System.out.println("여기까지---- " );
 				no = Long.parseLong(multi.getParameter("no"));
 				fileName = multi.getFilesystemName("imageFile");
 				System.out.println(fileName);

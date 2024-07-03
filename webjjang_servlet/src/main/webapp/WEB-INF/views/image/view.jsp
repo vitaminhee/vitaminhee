@@ -6,6 +6,11 @@
 <head>
 <meta charset="UTF-8">
 <title>이미지 보기</title>
+<script type="text/javascript">
+$(function() {
+	$('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 </head>
 <body>
 <div class="container">
@@ -17,10 +22,14 @@
 			  </b>
 			  </div>
 			  <div class="card-body">
-			  <div class="card" style="width:100%">
-			   
-			  <img class="card-img-top" src="${vo.fileName }" alt="image">
-					<div class="card-img-overlay">
+			  <div class="card">
+			  <div class="card-header">
+			  
+			  <!-- card 아래의 card-img-overlay
+			  위쪽의 이미지(또는 class = card-img-top - card 클래스 밖에서도 적용) -->
+			  <!-- - width의 기본이 100%로 되어있어서 card-img-top를 없앰 -->
+			  <img  src="${vo.fileName }" alt="image">
+					<div class="card-img-overlay"> <!-- 버튼이 하단에 -->
 					<c:if test="${login.id == vo.id }"> <!-- 로그인 처리가 되어야만 볼 수 있다. -->
 				    	<button type="button" class="btn btn-primary"
 				    	 data-toggle="modal" data-target="#changeImageModal">
@@ -37,7 +46,8 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">바꿀 이미지 선택</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-dismiss="mo
+        dal">&times;</button>
       </div>
 
 
@@ -78,6 +88,8 @@
 				    </c:if>
 				     <a href="${vo.fileName }" class="btn btn-success" download>download</a>
 				  </div>
+				  </div>
+				  
 			  <div class="card-body">
 			    <p class="card-text"><pre>${vo.content }</pre><p>
 			  </div>
@@ -89,8 +101,11 @@
 			  </div>
 			  </div>
 			  
-				<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
-				<a href="updateForm.do?no=${param.no }&page=${param.page }&perPageNum=${param.perPageNum}&key=${param.key}&word=${param.word}" class="btn btn-primary">수정</a>
+				<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지를 이동시킨다. -->
+				<!--  글 보기 데이터를 가져와야 함 -->
+				<a href="updateForm.do?no=${param.no }&page=${param.page }&perPageNum=${param.perPageNum}&key=${param.key}&word=${param.word}" 
+				class="btn btn-primary" title="이미지를 제외한 정보만 수정합니다."
+				data-toggle="tooltip" data-placement="top" id="updateBtn" >수정</a> <!-- 위에 보여지게끔 -->
 				<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
 				    삭제
 				  </button>

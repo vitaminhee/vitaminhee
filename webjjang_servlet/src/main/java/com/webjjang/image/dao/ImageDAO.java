@@ -181,8 +181,8 @@ public class ImageDAO extends DAO{
 	
 	// 4. 글 수정 처리
 	// 이미지를 제외한 것
-	// ImageController - (Execute) - BoardViewService - [BoardDAO.update()]
-	public int update(BoardVO vo) throws Exception{
+	// ImageController - (Execute) - ImageUpdateService - [ImageDAO.update()]
+	public int update(ImageVO vo) throws Exception{
 		// 결과를 저장할 수 있는 변수 선언.
 		int result = 0;
 		
@@ -195,21 +195,20 @@ public class ImageDAO extends DAO{
 			pstmt = con.prepareStatement(UPDATE);
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContent());
-			pstmt.setString(3, vo.getWriter());
-			pstmt.setLong(4, vo.getNo());
-			pstmt.setString(5, vo.getPw());
+			pstmt.setLong(3, vo.getNo());
+			pstmt.setString(4, vo.getId());
 			// 5. 실행 - update : executeUpdate() -> int 결과가 나옴.
 			result = pstmt.executeUpdate();
 			// 6. 표시 또는 담기
 			if(result == 0) { // 글번호가 존재하지 않는다. -> 예외로 처리한다.
-				throw new Exception("예외 발생 : 글번호나 비밀번호가 맞지 않습니다. 정보를 확인해 주세요.");
+				throw new Exception("예외 발생 : 번호가 맞지 않거나 본인의 글이 아닙니다. 정보를 확인해 주세요.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// 특별한 예외는 그냥 전달한다.
 			if(e.getMessage().indexOf("예외 발생") >= 0) throw e;
 			// 그외 처리 중 나타나는 오류에 대해서 사용자가 볼수 있는 예외로 만들어 전달한다.
-			else throw new Exception("예외 발생 : 게시판 글등록 DB 처리 중 예외가 발생했습니다.");
+			else throw new Exception("예외 발생 : 이미지 게시판 수정 DB 처리 중 예외가 발생했습니다.");
 		} finally {
 			// 7. 닫기
 			DB.close(con, pstmt);
@@ -376,9 +375,9 @@ public class ImageDAO extends DAO{
 	final String WRITE = "insert into image "
 			+ " (no, title, content, id, fileName) "
 			+ " values(image_seq.nextval, ?, ?, ?, ?)"; 
-	final String UPDATE= "update board "
-			+ " set title = ?, content = ?, writer = ? "
-			+ " where no = ? and pw = ?"; 
+	final String UPDATE= "update image "
+			+ " set title = ?, content = ? "
+			+ " where no = ? and id = ?"; // 본인 것만 수정 가능하게끔
 	final String DELETE= "delete from board "
 			+ " where no = ? and pw = ?"; 
 	

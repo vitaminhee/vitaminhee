@@ -17,21 +17,59 @@
 	선택의 상속 : a .data - a tag 안에 data class의 태그를 찾는다.
  */
 .dataRow:hover{
-	opacity : 70%; /* 투명도를 변경 */
+	opacity: 70%; /* 투명도 */
 	cursor: pointer;
+}
+
+.imageDiv{
+	background: black;
+}
+
+.title{
+	height: 60px;
 }
  
 </style>
 
 <script type="text/javascript">
 $(function(){
+	
+	// 이미지 사이즈 조정 5:4
+	let imgWidth = $(".imageDiv:first").width();
+	let imgHeight= $(".imageDiv:first").height();
+	console.log("image width=" + imgWidth + ", height=" + imgHeight)
+	// 높이 계산 - 너비는 동일하다. : 이미지와 이미지를 감싸고 있는 div의 높이로 사용
+	let height = imgWidth / 5 * 4;
+	// 전체 imageDiv의 높이를 조정한다.
+	$(".imageDiv").height(height);
+	// 이미지 배열로 처리하면 안된다. foreach 사용 - jquery each()
+	$(".imageDiv > img").each(function(idx, image){
+		//alert(image);
+		//alert(height);
+		//alert($(image).height());
+		// 이미지가 계산된 높이 보다 크면 줄인다.
+		if($(image).height() > height){
+			let image_width = $(image).width();
+			let image_height = $(image).height();
+			let width = height  / image_height * image_width;
+			
+			console.log("chaged image width = " + width);
+			
+			// 이미지 높이 줄이기
+			$(image).height(height);
+			// 이미지 너비 줄이기
+			$(image).width(width);
+			
+		}
+	});
+	
 	// 이벤트 처리
 	$(".dataRow").click(function(){
 		// alert("click");
-		// 글 번호 필요 - 수집
-		let no = $(this).find(".no").text(); // 안에 있는 걸 찾는..
+		// 글번호 필요 - 수집
+		let no = $(this).find(".no").text();
 		console.log("no = " + no);
-		location="view.do?no=" + no + "&inc=1&${pageObject.pageQuery}";
+		location="view.do?no=" + no + "&${pageObject.pageQuery}";
 	});
 	
 	// perPageNum 처리
@@ -61,11 +99,8 @@ $(function(){
 			      <select name="key" id="key" class="form-control">
 			      	<option value="t">제목</option>
 			      	<option value="c">내용</option>
-			      	<option value="w">작성자</option>
 			      	<option value="tc">제목/내용</option>
-			      	<option value="tw">제목/작성자</option>
-			      	<option value="cw">내용/작성자</option>
-			      	<option value="tcw">모두</option>
+			      	<option value="f">파일명</option>
 			      </select>
 			  </div>
 			  <input type="text" class="form-control" placeholder="검색"
@@ -94,68 +129,56 @@ $(function(){
 			  </div>
 		  </div>
 	  	</div>
-	  	<!-- col-md-4의 끝 : 한페이지당 표시 데이터 개수 -->
+	  	<!-- col-md-4의 끝 : 한 page당 표시 데이터 개수 -->
 	  </div>
   </form>
-  <c:if test="${empty list }"> <!-- 없으면 true -->
-  <div class="jumbotron">
-  <h4>데이터가 존재하지 않습니다.</h4>
-  </div>
-  </c:if>
-  
-  <c:if test="${!empty list }"> <!-- 없으면 true -->
-	  <div class="row">
-	  <!-- 이미지의 데이터가 있는 만큼 반복해서 표시하는 처리 시작. div가 데이터 있는 만큼 -->
-	  <c:forEach items="${list }" var="vo" varStatus="vs">
-	  <!-- 줄 바꿈 처리 - 찍는 index 번호가 3의 배수이면 줄바꿈 -->
-	  <c:if test="${(vs.index !=0) && (vs.index % 3 == 0) }">
-	  	${"</div>"}
-	  	${"</div class='row'>"} <!-- 다시 한 줄을 시작함 -->
-	  </c:if>
-	  <!-- 데이터를 표시하는 곳의 시작 -->
-	  <div class="col-md-4 dataRow">
-		<div class="card" style="width:100%">
-		  <img class="card-img-top" src="${vo.fileName }" alt="image">
-		  <div class="card-body">
-		    <strong class="card-title">
-		    <span class="float-right">${vo.writeDate }</span>
-		    ${vo.name }(${vo.id })
-		    </strong>
-		    <!-- 글 번호를 보이게 해서 숨기지 않음 -->
-		    <p class="card-text"><span class="no">${vo.no}</span> ${vo.title }</p>
-		  </div>
-		</div>
-	  	  <!-- 데이터를 표시하는 곳의 시작 -->
+  <c:if test="${empty list }">
+	 <div class="jumbotron">
+	    <h4>데이터가 존재하지 않습니다.</h4>      
 	  </div>
-	</c:forEach>
-	 <!-- 이미지의 데이터가 있는 만큼 반복해서 표시하는 처리 끝 -->
+  </c:if>
+  <c:if test="${!empty list }">
+  	<div class="row">
+	  	<!-- 이미지의 데이터가 있는 만큼 반복해서 표시하는 처리 시작 -->
+	  	<c:forEach items="${list }" var="vo" varStatus="vs">
+	  		<!-- 줄바꿈처리 - 찍는 인덱스 번호가 3의 배수이면 줄바꿈을 한다. -->
+	  		<c:if test="${(vs.index != 0) && (vs.index % 3 == 0) }">
+	  			${"</div>"}
+	  			${"<div class='row'>"}
+	  		</c:if>
+	  		<!-- 데이터 표시 시작 -->
+		  	<div class="col-md-4 dataRow">
+		  		<div class="card" style="width:100%">
+		  			<div class="imageDiv text-center align-content-center">
+					  <img class="card-img-top" src="${vo.fileName }" alt="image">
+		  			</div>
+				  <div class="card-body">
+				    <strong class="card-title">
+				    	<span class="float-right">${vo.writeDate }</span>
+				    	${vo.name }(${vo.id })
+				    </strong>
+				    <p class="card-text text-truncate title">
+				    	<span class="no">${vo.no}</span>. ${vo.title }
+				    </p>
+				  </div>
+				</div>
+		  	</div>
+	  		<!-- 데이터 표시 끝 -->
+	  	</c:forEach>
+	  	<!-- 이미지의 데이터가 있는 만큼 반복해서 표시하는 처리 끝 -->
 	</div>
 	
 	<!-- 페이지네이션 처리 -->
-  <!-- list에 해당되는 데이터 뿌링 -->
 	<div>
-	<pageNav:pageNav listURI="list.do" pageObject="${pageObject }"></pageNav:pageNav></div>
+		<pageNav:pageNav listURI="list.do" pageObject="${pageObject }" />
+	</div>
 	
-	<c:if test="${!empty login }"> <!-- 로그인이 되어있 -->
-	<!-- login이 되어있으면 보이게 하쟝. 권한처리(들어가지 못하게)는 ㄴㄴ -->
-	
-			<!-- //?perPageNum=${pageObject.perPageNum}는 
-			URL에 쿼리 파라미터를 추가하는 부분.
-			${pageObject.perPageNum}는 JSP의 EL을 사용하여 
-			pageObject라는 객체의 perPageNum 속성 값을 동적으로 삽입.
-			
-			writeForm.do URL로 이동하는 링크를 생성하며, 
-			perPageNum이라는 쿼리 파라미터에 pageObject 객체의 perPageNum 속성 값을 동적으로 할당
-			예를 들어, pageObject.perPageNum의 값이 10이라면, 
-			생성된 링크는 writeForm.do?perPageNum=10이 됨.
-			
-			//이 링크를 클릭하면 사용자는 writeForm.do 페이지로 이동하며,
-			 perPageNum 값이 URL 쿼리 파라미터로 전달 -->
-			 
-	<a href="writeForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">등록</a>
-	</c:if>
   </c:if>
-    
+  <!-- list 데이터 표시의 끝 -->
+	<c:if test="${ !empty login }">
+		<!-- 로그인이 되어 있으면 보이게. -->
+		<a href="writeForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">등록</a>
+	</c:if>
 </div>
 </body>
 </html>

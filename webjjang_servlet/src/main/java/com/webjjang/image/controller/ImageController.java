@@ -22,7 +22,7 @@ public class ImageController {
 	
 
 	public String execute(HttpServletRequest request) {
-		System.out.println("BoardController.execute() --------------------------");
+		System.out.println("ImageController.execute() --------------------------");
 		HttpSession session = request.getSession();
 		// uri
 		String uri = request.getRequestURI();
@@ -131,7 +131,7 @@ public class ImageController {
 				// : multi.getParameter에서!!
 				String title = multi.getParameter("title");
 				String content = multi.getParameter("content");
-				String fileName = multi.getFilesystemName("imagefile");
+				String fileName = multi.getFilesystemName("imageFile");
 				// id는 session에서 받아야한다. -> 위에서 id라는 변수로 처리함
 				
 				
@@ -160,7 +160,7 @@ public class ImageController {
 				jsp = "redirect:list.do?perPageNum=" 
 				+ multi.getParameter("perPageNum");
 				
-				httpsession.setAttribute("msg", "이미지 등록 완료!");
+				//httpsession.setAttribute("msg", "이미지 등록 완료!");
 				break;
 				
 				
@@ -212,12 +212,13 @@ public class ImageController {
 				
 			case "/image/delete.do":
 				System.out.println("5.이미지 게시판 글삭제");
-				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글번호, 비밀번호 - BoardVO
+				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글 번호, 아이디 - session
 				
 				no = Long.parseLong(request.getParameter("no"));
 				
-				BoardVO deleteVO = new BoardVO();
+				ImageVO deleteVO = new ImageVO();
 				deleteVO.setNo(no);
+				deleteVO.setId(id);
 				
 				// DB 처리
 				Execute.execute(Init.get(uri), deleteVO);
@@ -226,10 +227,21 @@ public class ImageController {
 				System.out.println("**  " + deleteVO.getNo()+ "글이 삭제되었습니다.  **");
 				System.out.println("***************************");
 				
+				// file 삭제를 하쟈
+				// 삭제할 파일 이름. deleteFileName로 보내고 있다.
+				// href="delete.do?no=${vo.no }&deleteFileName=$
+				String deleteFileName = request.getParameter("deleteFileName");
+				// 지난 이미지 파일은 존재하면 지운다.
+				File deleteFile = new File(request.getServletContext()
+						.getRealPath(deleteFileName));
+				if(deleteFile.exists()) deleteFile.delete(); // 파일 객체를 사용할 경우
+				
+				
 				jsp = "redirect:list.do?perPageNum=" 
 						+ request.getParameter("perPageNum");
 				
-				httpsession.setAttribute("msg", "글 삭제 완료!");
+				// 메시지 처리
+				session.setAttribute("msg", "이미지 게시판의 글이 삭제되었습니다!");
 				
 				break;
 				
@@ -253,8 +265,8 @@ public class ImageController {
 				fileName = multi.getFilesystemName("imageFile");
 				System.out.println(fileName);
 				
-				//
-				String deleteFileName = multi.getParameter("deleteFileName");
+				// 재사용. 이미 변수 선언을 했으므론
+				deleteFileName = multi.getParameter("deleteFileName");
 				
 				
 				// 변수 - vo 저장하고 Service : DB에 처리할 데이터만 표시
@@ -267,7 +279,7 @@ public class ImageController {
 				Execute.execute(Init.get(uri), vo);
 				
 				// 지난 이미지 파일은 존재하면 지운다.
-				File deleteFile = new File(request.getServletContext().getRealPath(deleteFileName));
+				deleteFile = new File(request.getServletContext().getRealPath(deleteFileName));
 				if(deleteFile.exists()) deleteFile.delete();
 				// 파일 객체에 해당
 				// 삭제하면 boolean type - true,false

@@ -89,7 +89,7 @@ $(function(){
 </head>
 <body>
 <div class="container">
-	<h2>이미지 게시판 리스트</h2>
+	<h2>image list</h2>
   <form action="list.do" id="searchForm">
   	<input name="page" value="1" type="hidden">
 	  <div class="row">

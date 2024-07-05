@@ -343,7 +343,7 @@ public class BoardDAO extends DAO{
 	final String INCREASE = "update board set hit = hit + 1 "
 			+ " where no = ?"; 
 	final String VIEW= "select no, title, content, writer, "
-			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit, " // 원래는 hit 뒤에 ,를 붙이면 안됨.
+			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit " // 원래는 hit 뒤에 ,를 붙이면 안됨.
 			// 예외처리 오류를 확인하기 위해 ,을 찍어둔거임
 			+ " from board "
 			+ " where no = ?";

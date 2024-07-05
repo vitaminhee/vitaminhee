@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%
+    // DispatcherServlet을 거치지 않고 들어온 경우
+    // uri가 없어서 request에서 꺼내서 담아둠.
+    if(session.getAttribute("uri")==null)
+    	session.setAttribute("uri",request.getRequestURI());
+    %>
     <!-- sitemesh 미적용 페이지. 웹 라이브러리 없 -->
 <!DOCTYPE html>
 <html>
@@ -22,15 +28,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+<style type="text/css">
+	#errorDiv>.row{
+		padding: 10px;
+		border-top: 1px dotted #ccc;
+		margin: 0 10px;
+	}
+	#errorDiv{
+/* 		padding: 30px; */
+	}
+</style>
+
 </head>
 <body>
 <div class="container">
 
 <div class="card">
-  <div class="card-header"><h3>요청 자원 오류(404)</h3></div>
+
+  <div class="card-header">
+  <i class="fa fa-times-circle"></i>
+  <h3>요청 자원 오류(404)</h3></div>
   <div class="card-body" id="errorDiv">
   	<div class="text-center">
-  		<i class="material-icons" style="font-size:100px;color:blue">error</i>
+  		<i class="fa fa-times-circle" style="font-size:100px;color:blue"></i>
   	</div>
   	<div class="row">
 	  <div class="col-md-3"><i class="fa fa-check"></i> 요청 uri</div>

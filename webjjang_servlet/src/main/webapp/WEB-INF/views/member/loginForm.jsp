@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container">
-<h3>로그인</h3>
+<h3>login</h3>
 	<form action="login.do" method="post">
 	  <div class="form-group">
 	    <label for="id">ID</label>

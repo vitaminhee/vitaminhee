@@ -200,18 +200,18 @@ public class BoardController {
 				break;
 				
 			default:
-				jsp = "error/404.jsp";
+				jsp = "error/404";
 				break;
 			} // end of switch
 		} catch (Exception e) {
 			// TODO: handle exception
 			// e.printStackTrace();
-			
+			jsp = "error/500";
 			// 예외 객체를 jsp에서 사용하기 위해서 request에 담는다.
 			// 넘어온 예외를 e로 담아 처리. Exception로 선언하면 충돌 발생
 			request.setAttribute("e", e);
 			
-		jsp = "error/500.jsp";
+		
 		} // end of try~catch
 		return jsp;
 	} // end of execute()

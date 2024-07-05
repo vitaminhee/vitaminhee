@@ -160,7 +160,7 @@ public class BoardDAO extends DAO{
 			} // end of if
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			throw new Exception("예외 발생 : 일반게시판의 글 보기 DB 처리 중 오류 발생");
 		} finally {
 			// 7. 닫기
 			DB.close(con, pstmt, rs);
@@ -343,7 +343,8 @@ public class BoardDAO extends DAO{
 	final String INCREASE = "update board set hit = hit + 1 "
 			+ " where no = ?"; 
 	final String VIEW= "select no, title, content, writer, "
-			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit "
+			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit, " // 원래는 hit 뒤에 ,를 붙이면 안됨.
+			// 예외처리 오류를 확인하기 위해 ,을 찍어둔거임
 			+ " from board "
 			+ " where no = ?";
 	final String WRITE = "insert into board "

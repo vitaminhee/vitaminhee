@@ -49,12 +49,14 @@ public class AuthorityFilter extends HttpFilter implements Filter {
 		String uri = req.getRequestURI();
 		System.out.println("Authority.doFilter().uri = " + uri);
 		
+		session.setAttribute("uri", uri);
+		
 		// 페이지의 권한을 int 로 가져온다. uri에 따른 데이터가 없으면 null이 나온다.
-		Integer grade = authMap.get(uri);
+		Integer pageGradeNo = authMap.get(uri);
 		LoginVO loginVO = null;
 		
 		// 로그인이 필요한 권한 처리
-		if(grade != null) {
+		if(pageGradeNo != null) {
 			loginVO = (LoginVO) session.getAttribute("login");
 			// 로그인을 하지 않은 경우의 처리 - 로그인 페이지로 이동시킨다.
 			if(loginVO == null) {
@@ -64,8 +66,25 @@ public class AuthorityFilter extends HttpFilter implements Filter {
 				// 로그인 페이지로 이동
 				res.sendRedirect("/member/loginForm.do");
 				return;
+			} // 로그인 처리 확인의 끝
+			
+			// 권한 처리 시작
+			Integer userGradeNo = loginVO.getGradeNo();
+			
+			// 로그인 처리가 된 경우 관리자 권한 체크 처리
+			if(pageGradeNo > 1) {
+				System.out.println("관리자 권한 체크");
+				if(pageGradeNo > userGradeNo) {
+					System.out.println("관리자 권한 체크 - 부적합");
+					req.getRequestDispatcher("/WEB-INF/views/error/authority.jsp")
+					.forward(req, res);
+					
+					return;
+				}
 			}
+			// 권한 처리 끝
 		}
+		
 		
 		// pass the request along the filter chain - 실제적으로 실행되는 곳으로 이동
 		chain.doFilter(request, response);
@@ -83,6 +102,9 @@ public class AuthorityFilter extends HttpFilter implements Filter {
 		authMap.put("/image/updateForm.do", 1);
 		authMap.put("/image/update.do", 1);
 		authMap.put("/image/delete.do", 1);
+		
+		authMap.put("/member/list.do", 9);
+		authMap.put("/member/changeGrade.do", 9);
 
 		// 권한 세팅 - URI 따른
 	}

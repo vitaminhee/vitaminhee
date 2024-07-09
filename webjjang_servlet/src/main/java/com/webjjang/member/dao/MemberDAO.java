@@ -3,6 +3,7 @@ package com.webjjang.member.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.webjjang.notice.vo.NoticeVO;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.member.vo.LoginVO;
 import com.webjjang.member.vo.MemberVO;
@@ -182,7 +183,7 @@ public class MemberDAO extends DAO{
 	} // end of checkId()
 	
 	
-	// 4. 회원정보 수정 처리
+	// 4-1. 회원정보 수정 처리
 	// NoticeController - (Execute) - NoticeViewService - [NoticeDAO.update()]
 	public int update(MemberVO vo) throws Exception{
 		// 결과를 저장할 수 있는 변수 선언.
@@ -223,6 +224,42 @@ public class MemberDAO extends DAO{
 		// 결과 데이터를 리턴해 준다.
 		return result;
 	} // end of update()
+	
+	// 4-2. 회원 등급 수정 처리
+	// NoticeController - (Execute) - NoticeViewService - [NoticeDAO.update()]
+	public int changeGrade(MemberVO vo) throws Exception{
+		// 결과를 저장할 수 있는 변수 선언.
+		int result = 0;
+		
+		try {
+			// 1. 드라이버 확인 - DB
+			// 2. 연결
+			con = DB.getConnection();
+			// 3. sql - 아래 UPDATE
+			// 4. 실행 객체 & 데이터 세팅
+			pstmt = con.prepareStatement(CHANGEGRADE);
+			pstmt.setInt(1, vo.getGradeNo());
+			pstmt.setString(2, vo.getId());
+			// 5. 실행 - update : executeUpdate() -> int 결과가 나옴.
+			result = pstmt.executeUpdate();
+			// 6. 표시 또는 담기
+			if(result == 0) { // 글번호가 존재하지 않는다. -> 예외로 처리한다.
+				throw new Exception("예외 발생 : 아이디나 등급번호가 맞지 않습니다. 정보를 확인해 주세요.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 특별한 예외는 그냥 전달한다.
+			if(e.getMessage().indexOf("예외 발생") >= 0) throw e;
+			// 그외 처리 중 나타나는 오류에 대해서 사용자가 볼수 있는 예외로 만들어 전달한다.
+			else throw new Exception("예외 발생 : 회원 등급변경 DB 처리 중 예외가 발생했습니다.");
+		} finally {
+			// 7. 닫기
+			DB.close(con, pstmt);
+		}
+		
+		// 결과 데이터를 리턴해 준다.
+		return result;
+	} // end of changeGrade()
 	
 	
 	// 5. 회원탈퇴 처리 : 상태 - 탈퇴로 변경
@@ -362,6 +399,7 @@ public class MemberDAO extends DAO{
 			+ " ) "
 			+ " where rnum between ? and ? "
 			; 
+	
 	final String VIEW= "select m.id, m.name, gender, "
 			+ " to_char(m.birth, 'yyyy-mm-dd') birth, m.tel, "
 			+ " email,  to_char(m.regDate, 'yyyy-mm-dd') regDate, "
@@ -369,22 +407,32 @@ public class MemberDAO extends DAO{
 			+ " m.photo, m.gradeNo, g.gradeName "
 			+ " from member m, grade g "
 			+ " where (id = ?) and (m.gradeNo = g.gradeNo) ";
+	
 	final String WRITE = "insert into member "
 			+ " (id, pw, name, gender, birth, tel, email, photo) "
 			+ " values(?, ?, ?, ?, ?, ?, ?, ?)"; 
+	
 	final String CHECKID = " select id from member "
 			+ " where id = ? ";
+	
 	final String UPDATE = "update member "
 			+ " set name = ?, gender = ?, birth = ?, tel = ?, "
 			+ " email = ?, photo = ? "
 			+ " where id = ? and pw = ?"; 
+	
+	final String CHANGEGRADE = "update member "
+			+ " set gradeNo = ? "
+			+ " where id = ? "; 
+	
 	final String DELETE= "update member set status = '탈퇴' "
 			+ " where id = ? and pw = ?"; 
+	
 	final String LOGIN = "select m.id, m.name, m.gradeNo, "
 			+ " g.gradeName, m.photo, m.newMsgCnt "
 			+ " from member m, grade g "
 			+ " where (id = ? and pw = ? and status = '정상') "
 			+ " and (g.gradeNo = m.gradeNo) ";
+	
 	final String UPDATE_CONDATE= "update member "
 			+ " set conDate = sysdate where id = ? "; 	
 }

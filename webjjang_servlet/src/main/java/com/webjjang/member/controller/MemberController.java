@@ -8,6 +8,11 @@ import javax.servlet.http.HttpSession;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.webjjang.board.service.BoardDeleteService;
+import com.webjjang.board.service.BoardListService;
+import com.webjjang.board.service.BoardUpdateService;
+import com.webjjang.board.service.BoardViewService;
+import com.webjjang.board.service.BoardWriteService;
 import com.webjjang.board.vo.BoardVO;
 import com.webjjang.image.vo.ImageVO;
 import com.webjjang.main.controller.Init;
@@ -254,6 +259,32 @@ public class MemberController {
 				// 글보기로 자동 이동 -> jsp 정보를 작성해서 넘긴다.
 				jsp = "redirect:view.do?no=" + no + "&inc=0"
 						+ "&" + pageObject.getPageQuery();
+				break;
+			case "/member/changeGrade.do":
+				System.out.println("4-3.회원 등급 수정 처리");
+				
+				// 데이터 수집(사용자->서버 : form - input - name)
+				id = request.getParameter("id");
+				Integer gradeNo = Integer.parseInt(request.getParameter("gradeNo"));
+				
+				// 변수 - vo 저장하고 Service
+				vo = new MemberVO();
+				vo.setId(id);
+				vo.setGradeNo(gradeNo);
+				
+				// DB 적용하는 처리문 작성. BoardUpdateservice
+				Execute.execute(Init.get(uri), vo);
+				
+				// 페이지 정보 받기 & uri에 붙이기
+				pageObject = PageObject.getInstance(request);
+				
+				// 메시지 처리
+				session.setAttribute("msg", "회원 ["+id+"]의 등급이 "
+						+((gradeNo==1)?"일반회원으로":"관리자로")+" 변경되었습니다.");
+				
+				// 글보기로 자동 이동 -> jsp 정보를 작성해서 넘긴다.
+				jsp = "redirect:list.do?"
+						+ pageObject.getPageQuery();
 				break;
 			case "/member/delete.do":
 				System.out.println("5.일반게시판 글삭제");

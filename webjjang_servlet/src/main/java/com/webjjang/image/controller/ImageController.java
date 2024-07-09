@@ -57,6 +57,10 @@ public class ImageController {
 		// 업로드 파일 용량 제한
 		int sizeLimit = 100 * 1024 * 1024;
 		
+		// realSavePath 폴더가 존재하지 않으면 만들자.
+		File realSavePathFile = new File(realSavePath);
+		if(!realSavePathFile.exists()) realSavePathFile.mkdirs();
+		
 		
 		
 		// 입력 받는 데이터 선언
@@ -265,7 +269,7 @@ public class ImageController {
 				fileName = multi.getFilesystemName("imageFile");
 				System.out.println(fileName);
 				
-				// 재사용. 이미 변수 선언을 했으므론
+				// 재사용. 이미 변수 선언을 했으므로
 				deleteFileName = multi.getParameter("deleteFileName");
 				
 				

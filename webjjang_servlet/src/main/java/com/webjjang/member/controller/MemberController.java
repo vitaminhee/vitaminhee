@@ -8,11 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import com.webjjang.board.service.BoardDeleteService;
-import com.webjjang.board.service.BoardListService;
-import com.webjjang.board.service.BoardUpdateService;
-import com.webjjang.board.service.BoardViewService;
-import com.webjjang.board.service.BoardWriteService;
 import com.webjjang.board.vo.BoardVO;
 import com.webjjang.image.vo.ImageVO;
 import com.webjjang.main.controller.Init;
@@ -106,23 +101,28 @@ public class MemberController {
 				
 				jsp = "redirect:/board/list.do";
 				break;
-			case "/member/list.do":
-				// [BoardController] - (Execute) - BoardListService - BoardDAO.list()
-				System.out.println("1.일반게시판 리스트");
+			case "/member/list.do": // 관리자만 가능하다.
+				// [MemberController] - (Execute)
+				// - MemberListService - MemberDAO.list()
+				System.out.println("1.회원 리스트");
 				// 페이지 처리를 위한 객체
 				// getInstance - 기본 값이 있고 넘어오는 페이지와 검색 정보를 세팅 처리
 				PageObject pageObject = PageObject.getInstance(request);
+				
+				// id setting - 관리자 계정은 제외시키기 위해서 => accepter
+				pageObject.setAccepter(id);
+				
 				// DB에서 데이터 가져오기 - 가져온 데이터는 List<BoardVO>
 				result = Execute.execute(Init.get(uri), pageObject);
 				
 				// pageObject 데이터 확인
-				System.out.println("BoardController.execute().pageObject = " + pageObject);
+				System.out.println("MemberController.execute().pageObject = " + pageObject);
 				// 가져온 데이터 request에 저장 -> jsp까지 전달된다.
 				request.setAttribute("list", result);
 				// pageObject 담기
 				request.setAttribute("pageObject", pageObject);
-				// /WEB-INF/views/ + board/list + .jsp
-				jsp = "board/list";
+				// /WEB-INF/views/ + member/list + .jsp
+				jsp = "member/list";
 				break;
 			case "/member/view.do":
 				System.out.println("2.일반게시판 글보기");
@@ -195,7 +195,7 @@ public class MemberController {
 				Execute.execute(Init.get(uri), vo);
 				
 				// 메시지 보내기
-				session.setAttribute("msg", "회원가입이 성공적으로 되셨습니다~~~");
+				session.setAttribute("msg", "축하합니다. 회원가입이 성공적으로 되셨습니다.");
 				
 				// jsp 정보 앞에 "redirect:"가 붙어 있어 redirect를
 				// 아니면 jsp로 forward로 시킨다. main으로 자동 이동시킨다.

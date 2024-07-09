@@ -25,6 +25,7 @@ import com.webjjang.main.dao.DAO;
 import com.webjjang.main.service.Service;
 import com.webjjang.member.dao.MemberDAO;
 import com.webjjang.member.service.MemberCheckIdService;
+import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
 
@@ -73,33 +74,34 @@ public class Init {
 			daoMap.put("memberDAO", new MemberDAO());
 		// service 생성
 		serviceMap.put("/member/login.do", new MemberLoginService());
-		serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
+		serviceMap.put("/member/list.do", new MemberListService());
 		serviceMap.put("/member/write.do", new MemberWriteService());
+		serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
+		
 		// 조립 dao->service		
 		serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
-		serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
+		serviceMap.get("/member/list.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/write.do").setDAO(daoMap.get("memberDAO"));
+		serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
+		
+		// ---- [이미지 게시판 객체 생성과 조립 ] -----------------------
+		// dao 생성
+		daoMap.put("imageDAO", new ImageDAO());
+		// service 생성
+		serviceMap.put("/image/list.do", new ImageListService());
+		serviceMap.put("/image/view.do", new ImageViewService());
+		serviceMap.put("/image/write.do", new ImageWriteService());
+		serviceMap.put("/image/update.do", new ImageUpdateService());
+		serviceMap.put("/image/delete.do", new ImageDeleteService());
+		serviceMap.put("/image/changeImage.do", new ImageChangeService());
 				
-				
-
-				// ---- [이미지 게시판 객체 생성과 조립 ] -----------------------
-				// dao 생성
-				daoMap.put("imageDAO", new ImageDAO());
-				// service 생성
-				serviceMap.put("/image/list.do", new ImageListService());
-				serviceMap.put("/image/view.do", new ImageViewService());
-				serviceMap.put("/image/write.do", new ImageWriteService());
-				serviceMap.put("/image/update.do", new ImageUpdateService());
-				serviceMap.put("/image/delete.do", new ImageDeleteService());
-				serviceMap.put("/image/changeImage.do", new ImageChangeService());
-				
-				// 조립 dao->service
-				serviceMap.get("/image/list.do").setDAO(daoMap.get("imageDAO"));
-				serviceMap.get("/image/view.do").setDAO(daoMap.get("imageDAO"));
-				serviceMap.get("/image/write.do").setDAO(daoMap.get("imageDAO"));
-				serviceMap.get("/image/update.do").setDAO(daoMap.get("imageDAO"));
-				serviceMap.get("/image/delete.do").setDAO(daoMap.get("imageDAO"));
-				serviceMap.get("/image/changeImage.do").setDAO(daoMap.get("imageDAO"));
+		// 조립 dao->service
+		serviceMap.get("/image/list.do").setDAO(daoMap.get("imageDAO"));
+		serviceMap.get("/image/view.do").setDAO(daoMap.get("imageDAO"));
+		serviceMap.get("/image/write.do").setDAO(daoMap.get("imageDAO"));
+		serviceMap.get("/image/update.do").setDAO(daoMap.get("imageDAO"));
+		serviceMap.get("/image/delete.do").setDAO(daoMap.get("imageDAO"));
+		serviceMap.get("/image/changeImage.do").setDAO(daoMap.get("imageDAO"));
 				
 				
 		System.out.println("Init.static 초기화 블록 ----- 객체 생성과 로딩 ------");

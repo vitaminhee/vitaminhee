@@ -63,6 +63,13 @@ public class DispatcherServlet extends HttpServlet {
 		String uri = request.getRequestURI();
 		System.out.println("uri = " + uri);
 		
+		
+		// main 처리 - localhost ->localhost/main.do. -> /main/main.do //도메인이 web.xml에 등록되어서..
+		if(uri.equals("/") || uri.equals("/main.do")) {
+			response.sendRedirect("/main/main.do");
+			return;
+		}
+		
 		// uri = /module/기능 -> /board/list.do
 		int pos = uri.indexOf("/", 1);
 		System.out.println("pos = " + pos);

@@ -3,7 +3,6 @@ package com.webjjang.main.controller;
 import java.io.IOException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +24,7 @@ public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// Controller 선언과 생성 - 1번만 된다.
+	private MainController mainController = new MainController();
 	private BoardController boardController = new BoardController();
 	private BoardReplyController boardReplyController
 		= new BoardReplyController();
@@ -63,8 +63,7 @@ public class DispatcherServlet extends HttpServlet {
 		String uri = request.getRequestURI();
 		System.out.println("uri = " + uri);
 		
-		
-		// main 처리 - localhost ->localhost/main.do. -> /main/main.do //도메인이 web.xml에 등록되어서..
+		// main 처리 - localhost -> localhost/main.do -> /main/main.do
 		if(uri.equals("/") || uri.equals("/main.do")) {
 			response.sendRedirect("/main/main.do");
 			return;
@@ -91,6 +90,11 @@ public class DispatcherServlet extends HttpServlet {
 		
 		switch (module) {
 		
+		case "/main":
+			System.out.println("main 처리");
+			jsp = mainController.execute(request);
+			break;
+			
 		case "/member":
 			System.out.println("회원 관리");
 			jsp = memberController.execute(request);

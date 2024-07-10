@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+/* 이미지 게시판 제목을 2줄만 표시하고 말 줄임표로 사용하는 */
+.title{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+ }
+ 
+ .imageLink:hover{
+	opacity: 70%; /* 투명도 */
+	cursor: pointer;
+}
+
+.boardLink:hover{
+	background: #e0e0e0;
+	cursor: pointer;
+}
+
+.module{
+	padding: 15px 5px;
+} /* 상하 좌우 */

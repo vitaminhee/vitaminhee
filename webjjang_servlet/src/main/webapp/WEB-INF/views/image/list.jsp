@@ -26,13 +26,33 @@
 }
 
 .title{
-	height: 60px;
-}
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+ }
  
 </style>
 
 <script type="text/javascript">
 $(function(){
+	
+	
+	// 제목 해당 태그 중 제일 높은 것을 이용하여 모두 맞추기
+	// console.log($(".title"));
+	let titleHeights = [];
+	
+	$(".title").each(function(idx, title){
+		console.log($(title).height());
+		titleHeights.push($(title).height());
+	});
+	console.log(titleHeights.join(", "));
+	
+	let maxTitleHeight = Math.max.apply(null, titleHeights);
+	console.log(maxTitleHeight);
+	
+	$(".title").height(maxTitleHeight);
 	
 	// 이미지 사이즈 조정 5:4
 	let imgWidth = $(".imageDiv:first").width();
@@ -62,6 +82,7 @@ $(function(){
 			
 		}
 	});
+	
 	
 	// 이벤트 처리
 	$(".dataRow").click(function(){

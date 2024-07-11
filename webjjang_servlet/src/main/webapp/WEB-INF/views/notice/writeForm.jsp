@@ -4,11 +4,38 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 글 등록</title>
+ <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+<title>notice writeForm</title>
+
+<script type="text/javascript">
+$(function(){
+	
+	// 날짜 입력 설정 - datepicker
+	let now = new Date();
+    let startYear = now.getFullYear();
+    let yearRange = (startYear - 2) +":" + startYear ;
+	$(".datepicker").datepicker({
+		// 입력란의 데이터 포맷 
+		dateFormat: "yy-mm-dd",
+		// 월 선택 입력 추가
+		changeMonth: true,
+		// 년 선택 입력 추가
+		changeYear: true,
+		// 월 선택할 때의 이름 - 원래는 영어가 기본
+		monthNamesShort: [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월" ],
+		// 달력의 요일 표시
+		dayNamesMin: [ "일", "월", "화", "수", "목", "금", "토" ],
+		// 선택 년도의 범위 - 0살~100살
+		yearRange: yearRange,
+	});
+}); // $(function())의 끝
+</script>
+
 </head>
 <body>
 <div class="containner">
-<h1>writeForm</h1>
+<h3>notice writeForm</h3>
 <form action="write.do" method="post">
 <!-- pageNum을 지정해야 servelt이~~ -->
 <input type="hidden" value = ${param.perPageNum } name = "perPageNum">
@@ -31,42 +58,27 @@
 			<th>내용</th>
 			<td>
 				<textarea class="form-control" id="content" name="content"  required
-				rows="7" placeholder="첫글자는 공백문자나 줄바꿈을 입력할 수 없습니다."></textarea>
+				rows="7" placeholder="첫 글자는 공백문자나 줄바꿈을 입력할 수 없습니다."></textarea>
 			</td>
 		</tr>
+		
+		 <tr>
+		 <th>게시일</th>
+		 <td>
+                <input id="startDate" name="startDate" required autocomplete="off" class="form-control datepicker">
+           </td>
+            </tr>
+		
+		
 		<tr>
-			<th>작성자</th>
-			<td>
-				<input id="writer" name="writer" required 
-					class="form-control" maxlength="10"
-					pattern="^[a-zA-Z가-힣]{2,10}$"
-					title="한글과 영어만 입력. 2~10자 입력"
-					placeholder="이름은 영어와 한글만 가능"
-				>
-			</td>
-		</tr>
-		<tr>
-			<th>비밀번호</th>
-			<td>
-				<input type="password" id="pw" name="pw" required 
-					class="form-control" maxlength="20"
-					pattern="^.{3,20}$"
-					title="3~20자 입력 가능"
-					placeholder="비밀번호를 입력하세요."
-				>
-			</td>
-		</tr>
-		<tr>
-			<th>비밀번호 확인</th>
-			<td>
-				<input type="password" id="pw2" required 
-					class="form-control" maxlength="20"
-					pattern="^.{3,20}$"
-					title="3~20자 입력 가능"
-					placeholder="비밀번호 확인을 입력하세요."
-				>
-			</td>
-		</tr>
+		 <th>종료일</th>
+		 <td>
+                <input id="endDate" name="endDate" required autocomplete="off" class="form-control datepicker">
+          </td>
+            </tr>
+		
+		
+		
 		<tr>
 			<td colspan="2">
 				<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->

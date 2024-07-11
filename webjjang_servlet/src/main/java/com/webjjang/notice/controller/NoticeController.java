@@ -38,43 +38,54 @@ public class NoticeController {
 			
 				// 메뉴 처리 : CRUD DB 처리 - Controller - Service - DAO
 				switch (uri) {
-				case "/notice/list.do":
-					// [NoticeController] - (Execute) - NoticeListService - NoticeDAO.list()
-					System.out.println("1.공지사항 리스트");
-					// DB에서 데이터 가져오기 - 가져온 데이터는 List<BoardVO>
-					result = Execute.execute(Init.get(uri), null);
-					// getInstance - 기본 값이 있고 넘어오는 페이지와 검색 정보를 세팅 처리
-					PageObject pageObject = PageObject.getInstance(request);
-					// 가져온 데이터 request에 저장 -> jsp까지 전달된다.
-					request.setAttribute("list", result);
-					// pageObject 데이터 확인
-					System.out.println("NoticeController.execute().pageObject = " + pageObject);
-					// pageObject 담기
-					 request.setAttribute("pageObject", pageObject);
-					// /WEB-INF/views/ + board/list + .jsp
+				  case "/notice/list.do":
+			            // [BoardController] - (Execute) - BoardListService - BoardDAO.list()
+			            System.out.println("1.공지사항 리스트");
+			            // 페이지 처리를 위한 객체
+			            // getInstance - 기본 값이 있고 넘어오는 페이지와 검색 정보를 세팅 처리
+			            PageObject pageObject = PageObject.getInstance(request);
+			            // DB에서 데이터 가져오기 - 가져온 데이터는 List<BoardVO>
+			            result = Execute.execute(Init.get(uri), pageObject);
+			            
+			            // pageObject 데이터 확인
+			            System.out.println("NoticeController.execute().pageObject = " + pageObject);
+			            // 가져온 데이터 request에 저장 -> jsp까지 전달된다.
+			            request.setAttribute("list", result);
+			            // pageObject 담기
+			            request.setAttribute("pageObject", pageObject);
+			            // /WEB-INF/views/ + board/list + .jsp
+			            jsp = "notice/list";
+			            break;
+			            
+			         case "/notice/view.do":
+			            System.out.println("2.공지사항 글보기");
+			            // 1. 조회수 1증가(글보기), 2. 일반게시판 글보기 데이터 가져오기 : 글보기, 글수정
+			            // 넘어오는 글번호와 조회수 1증가를 수집한다.(request에 들어 있다.)
+			            String strNo = request.getParameter("no");
+			            no = Long.parseLong(strNo);
+			            // 전달 데이터 - 글번호, 조회수 증가 여부(1:증가, 0:증가 안함) : 배열 또는 Map
+			            result = Execute.execute(Init.get(uri), no);
+			            // 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
+			            request.setAttribute("vo", result);
+			            
+			            jsp = "notice/view";
+			            break;
+			            
+			         case "/notice/writeForm.do":
+			        	 System.out.println("3-1.공지사항 글등록 폼");
+							jsp="notice/writeForm";
+							break;
 					
-					jsp = "notice/list";
-					
-					break;
-					
-				case "2":
-					System.out.println("2.공지사항 글보기");
-					// 1. 조회수 1증가(글보기), 2. 공지사항 글보기 데이터 가져오기 : 글보기, 글수정
-					// 사용자가 보고 싶은 글번호를 입력한다.
-					no = In.getLong("글번호");
-					// 전달 데이터 - 글번호, 조회수 증가 여부(1:증가, 0:증가 안함) : 배열 또는 Map
-					result = Execute.execute(new NoticeViewService(), no);
-					// 게시판 글보기 출력 : NoticePrint
-					new NoticePrint().print((NoticeVO)result);
-					break;
-				case "3":
+				case "/notice/write.do":
 					System.out.println("3.공지사항 글등록");
 					
 					// 데이터 수집 - 사용자 : 제목, 내용, 작성자, 비밀번호
-					String title = In.getStr("제목");
-					String content = In.getStr("내용");
-					String startDate = In.getStr("시작일(YYYY-MM-DD)");
-					String endDate = In.getStr("종료일(YYYY-MM-DD)");
+					// jsp에 있는 메서드 그대로..
+					String title = request.getParameter("title");
+					String content = request.getParameter("content");
+					String startDate = request.getParameter("startDate");
+					String endDate = request.getParameter("endDate");
+					
 					
 					// 변수 - vo 저장하고 Service
 					NoticeVO vo = new NoticeVO();
@@ -83,11 +94,14 @@ public class NoticeController {
 					vo.setStartDate(startDate);
 					vo.setEndDate(endDate);
 					
-					// [NoticeController] - NoticeWriteService - NoticeDAO.write(vo)
-					Execute.execute(new NoticeWriteService(), vo);
 					
+					// [NoticeController] - NoticeWriteService - NoticeDAO.write(vo)
+					result = Execute.execute(Init.get(uri), vo);
+					
+					jsp = "redirect:list.do"; // 등록했으니까 목록으로 돌아가야제
 					break;
-				case "4":
+					
+				case "/notice.update.do":
 					System.out.println("4.공지사항 글수정");
 					
 					// 수정할 글번호를 받는다. - 데이터 수집
@@ -127,7 +141,7 @@ public class NoticeController {
 						}
 						case "9": {
 							System.out.println();
-							System.out.println("*** 수정의 취소 되었습니다. ****");
+							System.out.println("*** 수정이 취소 되었습니다. ****");
 							break whileLoop;
 						}
 						case "0": {
@@ -145,7 +159,7 @@ public class NoticeController {
 					// DB 에 데이터 수정하기 - NoticeUpdateService
 					
 					break;
-				case "5":
+				case "/notice/delete.do":
 					System.out.println("5.공지사항 글삭제");
 					// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글번호
 					no = In.getLong("삭제할 글번호 입력");
@@ -169,7 +183,7 @@ public class NoticeController {
 				} // end of switch
 			} catch (Exception e) {
 				// TODO: handle exception
-				// e.printStackTrace();
+				e.printStackTrace();
 				System.out.println();
 				System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
 				System.out.println("$%@ << 오류 출력 >>                         $%@");

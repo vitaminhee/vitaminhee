@@ -28,14 +28,16 @@ public class NoticeDAO extends DAO{
 			// 3. sql - 아래 LIST
 			System.out.println("list query 준비" + LIST);
 			// 4. 실행 객체 & 데이터 세팅
-			pstmt = con.prepareStatement(LIST);
+			pstmt = con.prepareStatement(getListSQL(pageObject));
 			// 5. 실행
-			rs = pstmt.executeQuery(getListSQL(pageObject));
 			int idx = 0; // pstmt의 순서번호 사용. 먼저 1 증가하고 사용한다.
 			idx = setSearchData(pageObject, pstmt, idx);
 			pstmt.setLong(++idx, pageObject.getStartRow()); // 기본 값 = 1
 			pstmt.setLong(++idx, pageObject.getEndRow()); // 기본 값 = 10
 			
+			
+			// 쿼리 담는거니까...
+			rs = pstmt.executeQuery();
 			// 6. 표시 또는 담기
 			if(rs != null) {
 				while(rs.next()) {
@@ -140,7 +142,7 @@ public class NoticeDAO extends DAO{
 	} // end of view()
 	
 	// 3. 글등록 처리
-	// NoticeController - (Execute) - NoticeViewService - [NoticeDAO.write()]
+	// NoticeController - (Execute) - NoticeWriteService - [NoticeDAO.write()]
 	public int write(NoticeVO vo) throws Exception{
 		// 결과를 저장할 수 있는 변수 선언.
 		int result = 0;
@@ -156,6 +158,7 @@ public class NoticeDAO extends DAO{
 			pstmt.setString(2, vo.getContent());
 			pstmt.setString(3, vo.getStartDate());
 			pstmt.setString(4, vo.getEndDate());
+			
 			// 5. 실행 - update : executeUpdate() -> int 결과가 나옴.
 			result = pstmt.executeUpdate();
 			// 6. 표시 또는 담기
@@ -172,7 +175,7 @@ public class NoticeDAO extends DAO{
 		
 		// 결과 데이터를 리턴해 준다.
 		return result;
-	} // end of increase()
+	} // end of write()
 	
 	
 	// 4. 글수정 처리
@@ -321,9 +324,11 @@ public class NoticeDAO extends DAO{
 	final String WRITE = "insert into notice "
 			+ " (no, title, content, startDate, endDate) "
 			+ " values(notice_seq.nextval, ?, ?, ?, ?)"; 
+	
 	final String UPDATE= "update notice "
 			+ " set title = ?, content = ?, startDate = ?, endDate = ? "
 			+ " where no = ?"; 
+	
 	final String DELETE= "delete from notice "
 			+ " where no = ?"; 
 	

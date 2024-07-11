@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%
 // 여기는 자바입니다.
-System.out.println("일반 게시판 글수정 처리 : update.jsp ----------------------");
+System.out.println("notice 수정 처리 : update.jsp ----------------------");
 // 한글처리
 request.setCharacterEncoding("utf-8");
 // 데이터 수집

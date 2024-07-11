@@ -32,6 +32,8 @@ import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
 import com.webjjang.notice.dao.NoticeDAO;
 import com.webjjang.notice.service.NoticeListService;
+import com.webjjang.notice.service.NoticeViewService;
+import com.webjjang.notice.service.NoticeWriteService;
 
 public class Init {
 
@@ -112,9 +114,17 @@ public class Init {
 			daoMap.put("noticeDAO", new NoticeDAO());
 			// service 생성
 			serviceMap.put("/notice/list.do", new NoticeListService());
+			serviceMap.put("/notice/view.do", new NoticeViewService());
+			serviceMap.put("/notice/write.do", new NoticeWriteService());
+//			serviceMap.put("/notice/update.do", new NoticeViewService());
+//			serviceMap.put("/notice/delete.do", new NoticeViewService());
 			
 			// 조립 dao->service
 			serviceMap.get("/notice/list.do").setDAO(daoMap.get("noticeDAO"));
+			serviceMap.get("/notice/view.do").setDAO(daoMap.get("noticeDAO"));
+			serviceMap.get("/notice/write.do").setDAO(daoMap.get("noticeDAO"));
+//			serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
+//			serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));
 			
 			
 			

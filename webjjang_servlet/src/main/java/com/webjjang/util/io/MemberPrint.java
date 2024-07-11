@@ -2,7 +2,6 @@ package com.webjjang.util.io;
 
 import java.util.List;
 
-import com.webjjang.main.controller.Main;
 import com.webjjang.member.vo.MemberVO;
 
 public class MemberPrint {
@@ -33,8 +32,8 @@ public class MemberPrint {
 	// 회원 정보 보기 출력 메서드
 	public void print(MemberVO vo) {
 		System.out.println();
-		System.out.println("<<<---- "
-				+ ((Main.login.getGradeNo() == 9)?"회원":"내") + " 정보 보기 ---->>>");
+//		System.out.println("<<<---- "
+//				+ ((Main.login.getGradeNo() == 9)?"회원":"내") + " 정보 보기 ---->>>");
 		System.out.println("+-----------------------------------------------+");
 		System.out.println("+ 아이디 : " + vo.getId());
 		System.out.println("+ 이름 : " + vo.getName());

@@ -10,7 +10,7 @@
 <body>
 <div class="containner">
 	<form action="update.do" method="post">
-		<h3>update board</h3>
+	<h1>일반 게시판 글 수정</h1>
 		<table class="table">
 			<!-- tr : table row - 테이블 한줄 -->
 			<!-- 게시판 데이터의 제목 -->

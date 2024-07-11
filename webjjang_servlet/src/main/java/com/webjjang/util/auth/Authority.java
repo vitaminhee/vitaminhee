@@ -3,7 +3,7 @@ package com.webjjang.util.auth;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.webjjang.main.controller.Main;
+
 import com.webjjang.main.service.Service;
 
 public class Authority {
@@ -22,14 +22,14 @@ public class Authority {
 	public static void checkAuth(Service service) throws Exception{
 		Integer level = authMap.get(service.getClass().getSimpleName());
 		// 로그인이 필요한 처리
-		if(level != null) {
-			// 로그인을 안한 경우 처리.
-			if(Main.login == null) 
-				throw new Exception("예외 발생 : 로그인을 하셔야 합니다.");
-			// 로그인한 권한이 낮은 경우 처리.
-			if(level > Main.login.getGradeNo())
-				throw new Exception("예외 발생 : 처리할 권한이 없습니다.");
-		}
+//		if(level != null) {
+//			// 로그인을 안한 경우 처리.
+//			if(Main.login == null) 
+//				throw new Exception("예외 발생 : 로그인을 하셔야 합니다.");
+//			// 로그인한 권한이 낮은 경우 처리.
+//			if(level > Main.login.getGradeNo())
+//				throw new Exception("예외 발생 : 처리할 권한이 없습니다.");
+//		}
 	}
 	
 }

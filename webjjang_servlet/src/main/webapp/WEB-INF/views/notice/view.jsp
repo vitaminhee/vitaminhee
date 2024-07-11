@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container">
-		<h3>board view</h3>
+	<h1>일반 게시판 글보기</h1>
 	<table class="table">
 		<!-- tr : table row - 테이블 한줄 -->
 		<!-- 게시판 데이터의 제목 -->

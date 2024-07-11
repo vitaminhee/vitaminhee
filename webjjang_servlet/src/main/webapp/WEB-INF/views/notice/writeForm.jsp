@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="containner">
-	<h3>write board</h3>
+<h1>writeForm</h1>
 <form action="write.do" method="post">
 <!-- pageNum을 지정해야 servelt이~~ -->
 <input type="hidden" value = ${param.perPageNum } name = "perPageNum">

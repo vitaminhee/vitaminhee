@@ -30,6 +30,8 @@ import com.webjjang.member.service.MemberCheckIdService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
+import com.webjjang.notice.dao.NoticeDAO;
+import com.webjjang.notice.service.NoticeListService;
 
 public class Init {
 
@@ -105,7 +107,19 @@ public class Init {
 		serviceMap.get("/image/changeImage.do").setDAO(daoMap.get("imageDAO"));
 		
 
-		
+			// ---- [공지사항 객체 생성과 조립 ] -----------------------
+			// dao 생성
+			daoMap.put("noticeDAO", new NoticeDAO());
+			// service 생성
+			serviceMap.put("/notice/list.do", new NoticeListService());
+			
+			// 조립 dao->service
+			serviceMap.get("/notice/list.do").setDAO(daoMap.get("noticeDAO"));
+			
+			
+			
+			
+			
 		
 		System.out.println("Init.static 초기화 블록 ----- 객체 생성과 로딩 ------");
 	}

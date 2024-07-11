@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 리스트</title>
+<title>notice</title>
 <style type="text/css">
 /* 이곳을 주석입니다. Ctrl + Shift + C로 자동 주석 가능. 그러나 푸는 건 안된다.
 	선택자 {스타일 항목 : 스타일 값;스타일 항목 : 스타일 값;...}
@@ -51,7 +51,7 @@ $(function(){
 </head>
 <body>
 <div class="container">
-	<h3>board list</h3>
+	<h3>notice list</h3>
   <form action="list.do" id="searchForm">
   	<input name="page" value="1" type="hidden">
 	  <div class="row">
@@ -61,10 +61,7 @@ $(function(){
 			      <select name="key" id="key" class="form-control">
 			      	<option value="t">제목</option>
 			      	<option value="c">내용</option>
-			      	<option value="w">작성자</option>
 			      	<option value="tc">제목/내용</option>
-			      	<option value="tw">제목/작성자</option>
-			      	<option value="cw">내용/작성자</option>
 			      	<option value="tcw">모두</option>
 			      </select>
 			  </div>
@@ -103,9 +100,10 @@ $(function(){
 		<tr>
 			<th>번호</th>
 			<th>제목</th>
-			<th>작성자</th>
-			<th>작성일</th>
-			<th>조회수</th>
+			<th>게시일</th>
+			<th>종료일</th>
+			<th>수정일</th>
+
 		</tr>
 		<!-- 실제적인 데이터 표시 : 데이터가 있는 만큼 줄(tr)이 생긴다. -->
 		<!-- JS로 글보기로 페이지 이동
@@ -115,19 +113,14 @@ $(function(){
 				<!-- td : table data - 테이블 데이터 텍스트 -->
 				<td class="no">${vo.no}</td>
 				<td>${vo.title}</td>
-				<td>${vo.writer }</td>
-				<td>${vo.writeDate}</td>
-				<td>${vo.hit}</td>
+				<td>${vo.startDate}</td>
+				<td>${vo.endDate}</td>
+				<td>${vo.updateDate}</td>
+
 			</tr>
 		</c:forEach>
-		<tr>
-			<td colspan="5">
-				<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
-				<a href="writeForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">등록</a>
-			</td>
-		</tr>
+		
 	</table>
-	<div><pageNav:pageNav listURI="list.do" pageObject="${pageObject }"></pageNav:pageNav></div>
 </div>
 </body>
 </html>

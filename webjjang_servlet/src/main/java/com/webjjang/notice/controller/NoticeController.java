@@ -2,7 +2,11 @@ package com.webjjang.notice.controller;
 
 import java.util.List;
 
-import com.webjjang.main.controller.Main;
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import com.webjjang.main.controller.Init;
 import com.webjjang.notice.service.NoticeDeleteService;
 import com.webjjang.notice.service.NoticeListService;
 import com.webjjang.notice.service.NoticeUpdateService;
@@ -11,30 +15,21 @@ import com.webjjang.notice.service.NoticeWriteService;
 import com.webjjang.notice.vo.NoticeVO;
 import com.webjjang.util.exe.Execute;
 import com.webjjang.util.io.NoticePrint;
+import com.webjjang.util.page.PageObject;
 import com.webjjang.util.io.In;
 
 // Notice Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
 public class NoticeController {
 
-	public void execute() {
+	public String execute(HttpServletRequest request) {
 		// 게시판 기능 무한 반복
-		while(true) {
-			// 로그인 정보 출력
-			Main.loginInfo();
-			// 모듈 이름 출력
-			System.out.println();
-			System.out.println("<<---- 공지사항 ---->");
-			// 메뉴 출력
-			// 메뉴 출력 - 리스트, 글보기, 글등록, 글수정, 글삭제
-			System.out.println("*************************************");
-			System.out.println("** 1. 리스트, 2. 글보기, 3. 글등록     **");
-			System.out.println("** 4. 글수정, 5. 글삭제, 0. 이전 메뉴   **");
-			System.out.println("*************************************");
 
-			// 메뉴 입력
-			String menu = In.getStr("메뉴");
-			
+			// uri
+			String uri = request.getRequestURI();
+		
 			Object result = null;
+			
+			String jsp = null;
 			
 			// 입력 받는 데이터 선언
 			Long no = 0L;
@@ -42,15 +37,26 @@ public class NoticeController {
 			try { // 정상 처리
 			
 				// 메뉴 처리 : CRUD DB 처리 - Controller - Service - DAO
-				switch (menu) {
-				case "1":
+				switch (uri) {
+				case "/notice/list.do":
 					// [NoticeController] - (Execute) - NoticeListService - NoticeDAO.list()
 					System.out.println("1.공지사항 리스트");
-					// DB에서 데이터 가져오기 - 가져온 데이터는 List<NoticeVO>
-					result = Execute.execute(new NoticeListService(), null);
-					// 가져온 데이터 출력하기
-					new NoticePrint().print((List<NoticeVO>) result);
+					// DB에서 데이터 가져오기 - 가져온 데이터는 List<BoardVO>
+					result = Execute.execute(Init.get(uri), null);
+					// getInstance - 기본 값이 있고 넘어오는 페이지와 검색 정보를 세팅 처리
+					PageObject pageObject = PageObject.getInstance(request);
+					// 가져온 데이터 request에 저장 -> jsp까지 전달된다.
+					request.setAttribute("list", result);
+					// pageObject 데이터 확인
+					System.out.println("NoticeController.execute().pageObject = " + pageObject);
+					// pageObject 담기
+					 request.setAttribute("pageObject", pageObject);
+					// /WEB-INF/views/ + board/list + .jsp
+					
+					jsp = "notice/list";
+					
 					break;
+					
 				case "2":
 					System.out.println("2.공지사항 글보기");
 					// 1. 조회수 1증가(글보기), 2. 공지사항 글보기 데이터 가져오기 : 글보기, 글수정
@@ -152,9 +158,7 @@ public class NoticeController {
 					System.out.println("***************************");
 					
 					break;
-				case "0":
 					
-					return;
 	
 				default:
 					System.out.println("####################################");;
@@ -176,7 +180,7 @@ public class NoticeController {
 				System.out.println("$%@     : 계속 오류가 나면 전산담당자에게 연락하세요.");
 				System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
 			} // end of try~catch
-		} // end of while
+			return jsp;
 	} // end of main()
 	
 } // end of class

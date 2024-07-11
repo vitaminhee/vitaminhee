@@ -1,22 +1,13 @@
 package com.webjjang.notice.controller;
 
-import java.util.List;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.webjjang.main.controller.Init;
-import com.webjjang.notice.service.NoticeDeleteService;
-import com.webjjang.notice.service.NoticeListService;
-import com.webjjang.notice.service.NoticeUpdateService;
-import com.webjjang.notice.service.NoticeViewService;
-import com.webjjang.notice.service.NoticeWriteService;
 import com.webjjang.notice.vo.NoticeVO;
 import com.webjjang.util.exe.Execute;
-import com.webjjang.util.io.NoticePrint;
 import com.webjjang.util.page.PageObject;
-import com.webjjang.util.io.In;
 
 // Notice Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
 public class NoticeController {
@@ -26,7 +17,9 @@ public class NoticeController {
 
 			// uri
 			String uri = request.getRequestURI();
-		
+			// 처리결과를 화면에 표시하기 위해서 필요
+			HttpSession session = request.getSession();
+			
 			Object result = null;
 			
 			String jsp = null;
@@ -98,6 +91,8 @@ public class NoticeController {
 					// [NoticeController] - NoticeWriteService - NoticeDAO.write(vo)
 					result = Execute.execute(Init.get(uri), vo);
 					
+					session.setAttribute("msg", "공지 등록 완료");
+					
 					jsp = "redirect:list.do"; // 등록했으니까 목록으로 돌아가야제
 					break;
 					
@@ -141,6 +136,8 @@ public class NoticeController {
 					
 					pageObject = PageObject.getInstance(request); //jsp로 받아오기 전에 선언
 					
+					session.setAttribute("msg", "공지 수정 완료");
+					
 					jsp = "redirect:list.do?no="+ no +
 							 "&" + pageObject.getPageQuery();
 					
@@ -153,30 +150,24 @@ public class NoticeController {
 					// DB 처리
 					result= Execute.execute(Init.get(uri),no);
 					
+					session.setAttribute("msg", "공지 삭제 완");
+					
 					jsp = "redirect:list.do"; // 삭제했으니까 리스트로. 리다이렉트 안하면 500 error 발생..
 					
 					break;
 					
 	
 				default:
-					System.out.println("####################################");;
-					System.out.println("## 잘못된 메뉴를 선택하셨습니다.          ##");;
-					System.out.println("## [0~5, 0] 중에서 입력하셔야 합니다.    ##");;
-					System.out.println("####################################");;
+					jsp = "error/404";
 					break;
 				} // end of switch
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				System.out.println();
-				System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
-				System.out.println("$%@ << 오류 출력 >>                         $%@");
-				System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
-				System.out.println("$%@ 타입 : " + e.getClass().getSimpleName());
-				System.out.println("$%@ 내용 : " + e.getMessage());
-				System.out.println("$%@ 조치 : 데이터를 확인 후 다시 실행해 보세요.");
-				System.out.println("$%@     : 계속 오류가 나면 전산담당자에게 연락하세요.");
-				System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
+				
+				request.setAttribute("e", e); // e(예외)를 jsp에 보내서 표시
+				
+				jsp = "error/500";
 			} // end of try~catch
 			return jsp;
 	} // end of main()

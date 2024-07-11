@@ -1,17 +1,8 @@
 package com.webjjang.board.controller;
 
-import java.util.List;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
-
-import com.webjjang.board.service.BoardDeleteService;
-import com.webjjang.board.service.BoardListService;
-import com.webjjang.board.service.BoardUpdateService;
-import com.webjjang.board.service.BoardViewService;
-import com.webjjang.board.service.BoardWriteService;
 import com.webjjang.board.vo.BoardVO;
 import com.webjjang.main.controller.Init;
 import com.webjjang.util.page.PageObject;

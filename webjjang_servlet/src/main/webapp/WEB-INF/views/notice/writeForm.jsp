@@ -11,10 +11,11 @@
 <script type="text/javascript">
 $(function(){
 	
-	// 날짜 입력 설정 - datepicker
+	// 날짜 입력 설정 - datepicker : 전체 날짜 입력 형태만 잡아주는 거임
 	let now = new Date();
     let startYear = now.getFullYear();
-    let yearRange = (startYear - 2) +":" + startYear ;
+    // 현재부터 그 이후까지.
+    let yearRange = (startYear - 2) +":" + (startYear + 10) ;
 	$(".datepicker").datepicker({
 		// 입력란의 데이터 포맷 
 		dateFormat: "yy-mm-dd",
@@ -26,9 +27,29 @@ $(function(){
 		monthNamesShort: [ "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월" ],
 		// 달력의 요일 표시
 		dayNamesMin: [ "일", "월", "화", "수", "목", "금", "토" ],
-		// 선택 년도의 범위 - 0살~100살
+		// 선택 년도의 범위 - 현재부터 10년 이후까지 년도 검색 가능!
 		yearRange: yearRange,
 	});
+	
+	  $("#startDate").datepicker("option",
+			   {
+			      "minDate" : now, // mindate - 변수. 최소 날짜를 지금으로
+			      onClose : function( selectedDate ) { 
+			    	  if($(this).val() != "") // 선택된 날짜가 비어있지 않으면 종료일 세팅하자
+			         $( "#endDate" ).datepicker( "option", "minDate", selectedDate );
+			      }
+			   });
+
+			
+			   $("#endDate").datepicker("option", 
+			   {
+			      "minDate" : now, // mindate - 변수. 최소 날짜를 지금으로
+			      onClose : function( selectedDate ) { 
+			    	  if($(this).val() != "") // 선택된 날짜가 비어있지 않으면 시작일 세팅하자
+			         $( "#startDate" ).datepicker( "option", "maxDate", selectedDate );
+			      }
+			   });
+	
 }); // $(function())의 끝
 </script>
 

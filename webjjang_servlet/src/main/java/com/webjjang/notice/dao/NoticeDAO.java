@@ -179,7 +179,7 @@ public class NoticeDAO extends DAO{
 	
 	
 	// 4. 글수정 처리
-	// NoticeController - (Execute) - NoticeViewService - [NoticeDAO.update()]
+	// NoticeController - (Execute) - NoticeUpdateService - [NoticeDAO.update()]
 	public int update(NoticeVO vo) throws Exception{
 		// 결과를 저장할 수 있는 변수 선언.
 		int result = 0;
@@ -327,9 +327,9 @@ public class NoticeDAO extends DAO{
 	
 	final String UPDATE= "update notice "
 			+ " set title = ?, content = ?, startDate = ?, endDate = ? "
-			+ " where no = ?"; 
+			+ " where no = ?"; // 선택번호 수정
 	
 	final String DELETE= "delete from notice "
-			+ " where no = ?"; 
+			+ " where no = ?"; // 선택번호 삭제
 	
 }

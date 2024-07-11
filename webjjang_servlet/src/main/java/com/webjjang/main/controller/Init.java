@@ -31,7 +31,9 @@ import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
 import com.webjjang.notice.dao.NoticeDAO;
+import com.webjjang.notice.service.NoticeDeleteService;
 import com.webjjang.notice.service.NoticeListService;
+import com.webjjang.notice.service.NoticeUpdateService;
 import com.webjjang.notice.service.NoticeViewService;
 import com.webjjang.notice.service.NoticeWriteService;
 
@@ -73,22 +75,22 @@ public class Init {
 		serviceMap.get("/boardreply/update.do").setDAO(daoMap.get("replyBoardDAO"));
 		serviceMap.get("/boardreply/delete.do").setDAO(daoMap.get("replyBoardDAO"));
 
-		// ---- [회원관리 객체 생성과 조립 ] -----------------------
-		daoMap.put("memberDAO", new MemberDAO());
+				// ---- [회원관리 객체 생성과 조립 ] -----------------------
+				daoMap.put("memberDAO", new MemberDAO());
+				
+				serviceMap.put("/member/login.do", new MemberLoginService());
+				serviceMap.put("/member/list.do", new MemberListService());
+				serviceMap.put("/member/write.do", new MemberWriteService());
+				serviceMap.put("/member/changeGrade.do", new MemberChangeGradeService());
+				serviceMap.put("/member/changeStatus.do", new MemberChangeStatusService());
+				serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
 		
-		serviceMap.put("/member/login.do", new MemberLoginService());
-		serviceMap.put("/member/list.do", new MemberListService());
-		serviceMap.put("/member/write.do", new MemberWriteService());
-		serviceMap.put("/member/changeGrade.do", new MemberChangeGradeService());
-		serviceMap.put("/member/changeStatus.do", new MemberChangeStatusService());
-		serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
-
-		serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
-		serviceMap.get("/member/list.do").setDAO(daoMap.get("memberDAO"));
-		serviceMap.get("/member/write.do").setDAO(daoMap.get("memberDAO"));
-		serviceMap.get("/member/changeGrade.do").setDAO(daoMap.get("memberDAO"));
-		serviceMap.get("/member/changeStatus.do").setDAO(daoMap.get("memberDAO"));
-		serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
+				serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
+				serviceMap.get("/member/list.do").setDAO(daoMap.get("memberDAO"));
+				serviceMap.get("/member/write.do").setDAO(daoMap.get("memberDAO"));
+				serviceMap.get("/member/changeGrade.do").setDAO(daoMap.get("memberDAO"));
+				serviceMap.get("/member/changeStatus.do").setDAO(daoMap.get("memberDAO"));
+				serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
 
 		// ---- [이미지 게시판 객체 생성과 조립 ] -----------------------
 		// dao 생성
@@ -116,21 +118,16 @@ public class Init {
 			serviceMap.put("/notice/list.do", new NoticeListService());
 			serviceMap.put("/notice/view.do", new NoticeViewService());
 			serviceMap.put("/notice/write.do", new NoticeWriteService());
-//			serviceMap.put("/notice/update.do", new NoticeViewService());
-//			serviceMap.put("/notice/delete.do", new NoticeViewService());
+			serviceMap.put("/notice/update.do", new NoticeUpdateService());
+			serviceMap.put("/notice/delete.do", new NoticeDeleteService());
 			
 			// 조립 dao->service
 			serviceMap.get("/notice/list.do").setDAO(daoMap.get("noticeDAO"));
 			serviceMap.get("/notice/view.do").setDAO(daoMap.get("noticeDAO"));
 			serviceMap.get("/notice/write.do").setDAO(daoMap.get("noticeDAO"));
-//			serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
-//			serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));
+			serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
+			serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));
 			
-			
-			
-			
-			
-		
 		System.out.println("Init.static 초기화 블록 ----- 객체 생성과 로딩 ------");
 	}
 	

@@ -14,6 +14,7 @@ import com.webjjang.board.service.BoardViewService;
 import com.webjjang.board.service.BoardWriteService;
 import com.webjjang.board.vo.BoardVO;
 import com.webjjang.main.controller.Init;
+import com.webjjang.member.vo.LoginVO;
 import com.webjjang.util.page.PageObject;
 import com.webjjang.util.page.ReplyPageObject;
 import com.webjjang.util.exe.Execute;
@@ -23,13 +24,20 @@ public class MainController {
 
 	public String execute(HttpServletRequest request) {
 		System.out.println("MainController.execute() --------------------------");
-		HttpSession session = request.getSession();
 		// uri
 		String uri = request.getRequestURI();
 		
 		Object result = null;
 		
 		String jsp = null;
+		
+		HttpSession session =request.getSession();
+		int gradeNo = 0;
+		LoginVO login = (LoginVO) session.getAttribute("login");
+		if (login != null) {
+			gradeNo = login.getGradeNo();
+		}
+		
 		
 		try { // 정상 처리
 		
@@ -42,8 +50,22 @@ public class MainController {
 				// 페이지 처리를 위한 객체 생성
 				PageObject pageObject = new PageObject();
 				
+				if(gradeNo == 9) {
+					pageObject.setPeriod("all");
+				}
+				else if(gradeNo == 9) {
+					pageObject.setPeriod("pre");
+				}
+				
 				// Main에 표시할 데이터 - 일반 게시판 / 이미지 게시판
 				// DB에서 데이터 가져오기
+				
+				// notice
+				pageObject.setPerPageNum(7);
+				// [MainController] - (Execute) - NoticeListService - NoticeDAO.list()
+				result = Execute.execute(Init.get("/notice/list.do"), pageObject);
+				request.setAttribute("noticelist", result); // 가져온 데이터 request에 저장 -> jsp까지 전달된다.
+				
 				// 일반 게시판의 데이터를 몇 개를 가져올지.. setting
 				pageObject.setPerPageNum(6);
 				// [MainController] - (Execute) - BoardListService - BoardDAO.list()

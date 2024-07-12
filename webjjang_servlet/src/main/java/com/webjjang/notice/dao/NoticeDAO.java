@@ -101,7 +101,6 @@ public class NoticeDAO extends DAO{
 	} // end of getTotalRow()
 	
 	
-	
 	// 2. 글보기 처리
 	// NoticeController - (Execute) - NoticeListService - [NoticeDAO.view()]
 	public NoticeVO view(Long no) throws Exception{
@@ -274,21 +273,46 @@ public class NoticeDAO extends DAO{
 		final String TOTALROW = "select count(*) from notice ";
 		
 		// LIST에 검색을 처리해서 만들지는 sql문 작성 메서드
+		// LIST에 검색을 처리해서 만들지는 sql문 작성 메서드
 		private String getListSQL(PageObject pageObject) {
-			String sql = LIST; 
-			String word = pageObject.getWord();
-			if(word != null && !word.equals("")) sql += getSearch(pageObject);
-			sql += " order by updateDate desc, no desc"
-					+ " ) "
-					+ " ) where rnum between ? and ? ";
-			return sql;
+		    // 기본 SQL 문을 LIST로 초기화
+		    String sql = LIST; 
+		    // pageObject에서 검색어를 가져옴
+		    String word = pageObject.getWord();
+		    
+		    // 기간 조건에 따라 SQL 문을 추가
+		    if(pageObject.getPeriod().equals("pre")) {
+		        // 현재 공지: 시작 날짜가 오늘 이전이고 종료 날짜가 오늘 이후인 경우
+		        sql += " where (startDate <= sysDate) and (endDate >= sysDate) ";
+		    }
+		    else if(pageObject.getPeriod().equals("old")) {
+		        // 지난 공지: 종료 날짜가 오늘 이전인 경우
+		        sql += " where (endDate < sysDate) ";
+		    }
+		    else if(pageObject.getPeriod().equals("res")) {
+		        // 예정 공지: 시작 날짜가 오늘 이후인 경우
+		        sql += " where (startDate > sysDate) ";
+		    }
+		    
+		    // 검색어가 있는 경우, 검색 조건을 추가
+		    if(word != null && !word.equals("")) sql += getSearch(pageObject);
+		    
+		    // 결과를 정렬하고, 페이징 처리를 위해 rnum 조건을 추가
+		    sql += " order by updateDate desc, no desc"
+		            + " ) "
+		            + " ) where rnum between ? and ? ";
+		    
+		    // 최종 SQL 문을 반환
+		    return sql;
 		}
+
 		
 		// 리스트의 검색만 처리하는 쿼리 - where
 		private String getSearch(PageObject pageObject) {
 			String sql = "";
 			String key = pageObject.getKey(); // 공지사항에서 검색할 수 있는 건 제목, 내용
 			String word = pageObject.getWord();
+			
 			if(word != null && !word.equals("")) {
 				sql += " where 1=0 ";
 			// key안에 t가 포함되어 있으면 title로 검색을 한다.

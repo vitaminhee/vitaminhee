@@ -24,7 +24,12 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
-$(function(){
+	
+	$(function(){
+		<%-- 	$("#${pageObject.period}").prop('checked', true); // 태그 선택을 아이디로 --%>
+			$("[value='${pageObject.period}']").prop('checked', true); // 태그 선택 속성으로
+			// 속성에 해당되는. period가 붙어있는 value 값을..
+	
 	// 이벤트 처리
 	$(".dataRow").click(function(){
 		// alert("click");
@@ -45,6 +50,26 @@ $(function(){
 	// 검색 데이터 세팅
 	$("#key").val("${(empty pageObject.key) ? 't' : pageObject.key}");
 	$("#perPageNum").val("${(empty pageObject.perPageNum) ? '10' : pageObject.perPageNum}");
+	
+	$(".noticeOption").change(function() {
+		//alert("radio button click change");
+		if (this.optionList[0].checked) {
+			//alert("현재 공지 보여주십쇼!!!!!!!!!!!!!")	
+			location = "/notice/list.do?period=pre";
+		}
+		else if (this.optionList[1].checked) {
+			//alert("이전 공지 보여주십쇼!!!!!!!!!!!!!")	
+			location = "/notice/list.do?period=old";
+		}
+		else if (this.optionList[2].checked) {
+			//alert("예정 공지 보여주십쇼!!!!!!!!!!!!!")	
+			location = "/notice/list.do?period=res";
+		}
+		else if (this.optionList[3].checked) {
+			//alert("모든 공지 보여주십쇼!!!!!!!!!!!!!")
+			location = "/notice/list.do?period=all";
+		}
+	});
 });
 </script>
 
@@ -52,6 +77,35 @@ $(function(){
 <body>
 <div class="container">
 	<h3>notice list</h3>
+	
+	
+		<c:if test="${!empty login && login.gradeNo == 9 }"> <!-- 권한 처리 -->
+			<form class="noticeOption">
+			  <div class="custom-control custom-radio custom-control-inline">
+			    <input type="radio" class="custom-control-input" id="pre" name="optionList" value="pre">
+			    <label class="custom-control-label" for="pre">현재 공지</label>
+			  </div>
+			  
+			  <div class="custom-control custom-radio custom-control-inline">
+			    <input type="radio" class="custom-control-input" id="old" name="optionList" value="old">
+			    <label class="custom-control-label" for="old">이전 공지</label>
+			  </div>
+			  
+			   <div class="custom-control custom-radio custom-control-inline">
+			    <input type="radio" class="custom-control-input" id="res" name="optionList" value="res">
+			    <label class="custom-control-label" for="res">예정 공지</label>
+			  </div>
+			  
+			  <div class="custom-control custom-radio custom-control-inline">
+			    <input type="radio" class="custom-control-input" id="all" name="optionList" value="all">
+			    <label class="custom-control-label" for="all">모든 공지</label>
+			  </div>
+			</form>
+			
+		</c:if>
+	
+	
+	<!-- 검색란의 시작 -->
 	<form action="list.do" id="searchForm">
 		<input name="page" value="1" type="hidden">
 		<div class="row">
@@ -117,13 +171,11 @@ $(function(){
 				<td>${vo.updateDate}</td>
 			</tr>
 		</c:forEach>
-		
-		<tr>
-			<td colspan="5">
+		<c:if test="${!empty login && login.gradeNo == 9 }"> <!-- 권한 처리 -->
 				<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
 				<a href="writeForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">등록</a>
-			</td>
-		</tr>
+		
+		</c:if>
 	</table>
 	<div>
 		<pageNav:pageNav listURI="list.do" pageObject="${pageObject }"></pageNav:pageNav>

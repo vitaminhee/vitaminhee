@@ -263,7 +263,9 @@ public class NoticeDAO extends DAO{
 					+ " to_char(startDate, 'yyyy-mm-dd') startDate, "
 					+ " to_char(endDate, 'yyyy-mm-dd') endDate, "
 					+ " to_char(updateDate, 'yyyy-mm-dd') updateDate "
-					+ " from notice ";
+					+ " from notice "
+					+ " where (1 = 1) "
+					;
 					// 검색 부분
 			//+ " order by updateDate desc, no desc"; 
 	
@@ -273,29 +275,13 @@ public class NoticeDAO extends DAO{
 		final String TOTALROW = "select count(*) from notice ";
 		
 		// LIST에 검색을 처리해서 만들지는 sql문 작성 메서드
-		// LIST에 검색을 처리해서 만들지는 sql문 작성 메서드
 		private String getListSQL(PageObject pageObject) {
 		    // 기본 SQL 문을 LIST로 초기화
 		    String sql = LIST; 
+		    sql += getSearch(pageObject); // pageObject를 넣
+		    sql += getPeriod(pageObject); // pageObject를 넣
 		    // pageObject에서 검색어를 가져옴
-		    String word = pageObject.getWord();
-		    
-		    // 기간 조건에 따라 SQL 문을 추가
-		    if(pageObject.getPeriod().equals("pre")) {
-		        // 현재 공지: 시작 날짜가 오늘 이전이고 종료 날짜가 오늘 이후인 경우
-		        sql += " where (startDate <= sysDate) and (endDate >= sysDate) ";
-		    }
-		    else if(pageObject.getPeriod().equals("old")) {
-		        // 지난 공지: 종료 날짜가 오늘 이전인 경우
-		        sql += " where (endDate < sysDate) ";
-		    }
-		    else if(pageObject.getPeriod().equals("res")) {
-		        // 예정 공지: 시작 날짜가 오늘 이후인 경우
-		        sql += " where (startDate > sysDate) ";
-		    }
-		    
-		    // 검색어가 있는 경우, 검색 조건을 추가
-		    if(word != null && !word.equals("")) sql += getSearch(pageObject);
+		    //String word = pageObject.getWord();
 		    
 		    // 결과를 정렬하고, 페이징 처리를 위해 rnum 조건을 추가
 		    sql += " order by updateDate desc, no desc"
@@ -314,18 +300,41 @@ public class NoticeDAO extends DAO{
 			String word = pageObject.getWord();
 			
 			if(word != null && !word.equals("")) {
-				sql += " where 1=0 ";
+				sql += " and ( 1=0 ";
 			// key안에 t가 포함되어 있으면 title로 검색을 한다.
 				if(key.indexOf("t") >= 0) sql += " or title like ? ";
 				if(key.indexOf("c") >= 0) sql += " or content like ? ";
+				sql += " ) ";
 			}
-			return sql;
+			return sql; // 있으면 return
 			
 		}
 		
+		// 리스트의 기간 검색만 처리하는 쿼리 - where
+				private String getPeriod(PageObject pageObject) {
+					String sql = "";
+					String period = pageObject.getPeriod(); // getPeriod() 변수에 받아내자
+						sql += " and ( 1=1 "; // 조건이 없으면 항상 true
+					// period에 따라서 기간을 검색한다.
+						if(period.equals("pre")) // 현재 공지
+							sql += " and (1=1 and trunc(sysDate) between  trunc(startDate) and  trunc(endDate)) ";
+						
+						else if(period.equals("old"))  // 지난 공지
+							sql += " and trunc(sysDate) > trunc(endDate) ";
+				
+						else if(period.equals("res")) // 예약 공지
+							sql += " and trunc(sysDate) < trunc(startDate) ";
+						else sql += ""; // 모든 공지는 조건이 없음
+						sql += " ) ";
+						return sql; // 있으면 return
+					}
+					
+					
+		
 		// 검색 쿼리의 ? 데이터를 세팅하는 메서드
 		private int setSearchData(PageObject pageObject, 
-				PreparedStatement pstmt, int idx) throws SQLException {
+				PreparedStatement pstmt, int idx) throws SQLException { // pstmt는 참조형 변수,
+			// idx는 기본형 변수이므로 데이터 넘겨받
 			String key = pageObject.getKey();
 			String word = pageObject.getWord();
 			if(word != null && !word.equals("")) {

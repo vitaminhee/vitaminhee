@@ -29,6 +29,10 @@
 
    <style type="text/css">
    
+   .container{
+   padding: 30px 5px;
+   }
+   
    pre {
       background: white;
       border: 0px;
@@ -60,7 +64,8 @@
    }
    
    article {
-      min-height: 795px;
+      min-height: 795px; /* 지우면 copyright가 위로 올라가서 별로임 */
+      margin-top: 60px;
    }
    
    #welcome {
@@ -74,11 +79,20 @@
 </head>
 <body>
    <header>
-      <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+   <!-- fixed-top - nav bar가 위로 고정! -->
+      <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
          <a class="nav-link" href="/">웹짱닷컴</a>
+         
+         <!-- 보여지는 너비가 작은 경우 나타나는 메뉴 줄임 3선 -->
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+         
+         
       <!-- 주메뉴 부분 -->
          <!-- 오른쪽 부분의 내용을 오른쪽 끝에 두기 위해서
           mr-* 오른쪽 마진 사용. auto : 데이터를 제외한 부분을 margin으로 사용 -->
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item ${(module == '/notice')?'active':'' }">
             <a class="nav-link" href="/notice/list.do">공지사항</a>
@@ -149,6 +163,7 @@
              </li>
           </c:if>
         </ul>
+        </div>
       </nav>
    
    </header>

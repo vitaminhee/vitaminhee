@@ -44,11 +44,9 @@ public class Execute {
 		
 		System.out.println("-------------------------------------------------------");
 		
-//		// 최근 접속일 수정 - 로그인이 되어 있는 경우만
-//		if(Main.login != null) {
-//			new MemberConUpdateService().service(Main.login.getId());
-//		}
-//		
+		// 최근 접속일 수정 - 로그인이 되어 있는 경우만 -> 필터로 처리하기로 함. 계획임
+		
+		
 		// 처리된 결과를 리턴한다.
 		return result;
 	}

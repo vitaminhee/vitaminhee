@@ -111,13 +111,14 @@ $(function(){
 		
 			
 			<tr>
-				<td colspan="2">
-					<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
-					<button class="btn btn-primary">수정</button>
-					<button type="reset" class="btn btn-secondary">다시입력</button>
-					<button type="button" class="btn btn-warning onclick="history.back();">취소</button>
-				</td>
+			    <td colspan="2">
+			        <!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
+			        <button class="btn btn-primary">수정</button>
+			        <button type="reset" class="btn btn-secondary">다시입력</button>
+			        <button type="button" class="btn btn-warning" onclick="history.back();">취소</button>
+			    </td>
 			</tr>
+
 		</table>
 	</form>
 </div>

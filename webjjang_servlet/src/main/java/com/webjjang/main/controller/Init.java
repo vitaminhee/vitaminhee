@@ -27,6 +27,7 @@ import com.webjjang.member.dao.MemberDAO;
 import com.webjjang.member.service.MemberChangeGradeService;
 import com.webjjang.member.service.MemberChangeStatusService;
 import com.webjjang.member.service.MemberCheckIdService;
+import com.webjjang.member.service.MemberConUpdateService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
@@ -89,13 +90,15 @@ public class Init {
 				serviceMap.put("/member/write.do", new MemberWriteService());
 				serviceMap.put("/member/changeGrade.do", new MemberChangeGradeService());
 				serviceMap.put("/member/changeStatus.do", new MemberChangeStatusService());
+				// MemberController에서 들어오지 않고 필터(UpdateConDateFilter)에서 들어옴.
+				serviceMap.put("/member/updateConDate.do", new MemberConUpdateService());
 				serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
-		
 				serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
 				serviceMap.get("/member/list.do").setDAO(daoMap.get("memberDAO"));
 				serviceMap.get("/member/write.do").setDAO(daoMap.get("memberDAO"));
 				serviceMap.get("/member/changeGrade.do").setDAO(daoMap.get("memberDAO"));
 				serviceMap.get("/member/changeStatus.do").setDAO(daoMap.get("memberDAO"));
+				serviceMap.get("/member/updateConDate.do").setDAO(daoMap.get("memberDAO"));
 				serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
 
 		// ---- [이미지 게시판 객체 생성과 조립 ] -----------------------

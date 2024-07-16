@@ -176,10 +176,11 @@ public class QnaDAO extends DAO{
 		
 		// 결과 데이터를 리턴해 준다.
 		return result;
-	} // end of increase()
+	} // end of increaseOrdNo()
 	
 	// 3-2. 질문 답변의 글번호 받아오기
 		// QnaController - (Execute) - QnaWriteService - [QnaDAO.getNo()]
+	
 		public Long getNo() throws Exception{
 			// 결과를 저장할 수 있는 변수 선언.
 			Long no = null;
@@ -223,7 +224,7 @@ public class QnaDAO extends DAO{
 			// 4. 실행 객체 & 데이터 세팅
 			// (no, title, content, id, refNo, ordNo, levNo, parentNo)
 			if(vo.isQuestion())
-				pstmt = con.prepareStatement(QUESTION);
+				pstmt = con.prepareStatement(QUESTION); // 질문이면
 			else
 				pstmt = con.prepareStatement(ANSWER);
 			pstmt.setLong(1, vo.getNo());

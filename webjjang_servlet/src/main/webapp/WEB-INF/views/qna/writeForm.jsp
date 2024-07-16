@@ -15,7 +15,7 @@
 		<input type="hidden" name="perPageNum" value="${param.perPageNum }">
 		<!-- 질문답변 운영 정보 -->
 		<input type="hidden" name="refNo" value="${vo.refNo }">
-		<input type="hidden" name="ordNo" value="${(empty vo)?1:vo.ordNo + 1 }"> <!-- null이면 1 -->
+		<input type="hidden" name="ordNo" value="${(empty vo)?1:vo.ordNo + 1 }"> <!--  -->
 		<input type="hidden" name="levNo" value="${(empty vo)?0:vo.levNo + 1 }">
 		<input type="hidden" name="parentNo" value="${vo.no }">
 		<div class="form-group">

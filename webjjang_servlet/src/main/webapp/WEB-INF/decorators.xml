@@ -10,6 +10,7 @@
 		<pattern>/board/*</pattern>
 		<pattern>/notice/*</pattern>
 		<pattern>/image/*</pattern>
+		<pattern>/qna/*</pattern>
 		<pattern>/member/*</pattern>
 
 	</decorator>

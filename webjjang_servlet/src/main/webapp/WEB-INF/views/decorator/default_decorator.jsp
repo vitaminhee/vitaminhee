@@ -76,6 +76,17 @@
 
    <!-- 개발자가 작성한 소스의 head 태그를 여기에 넣게 된다. title은 제외 -->
    <decorator:head/>
+   
+   
+   <script type="text/javascript">
+   $(function() {
+	// 취소 버튼 이벤트
+	$(".cancelBtn").click(function() {
+		history.back();
+	});
+});
+   </script>
+   
 </head>
 <body>
    <header>
@@ -105,6 +116,9 @@
           </li>
           <li class="nav-item ${(module == '/board')?'active':'' }">
             <a class="nav-link" href="/board/list.do">일반게시판</a>
+          </li>
+           <li class="nav-item ${(module == '/qna')?'active':'' }">
+            <a class="nav-link" href="/qna/list.do">질문답변</a>
           </li>
           <c:if test="${!empty login && login.gradeNo ==9}"> 
         <!-- 관리자 메뉴 -->

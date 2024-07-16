@@ -8,6 +8,24 @@
 <meta charset="UTF-8">
 <title>질문답변 리스트</title>
 
+ <style type="text/css">
+        .dataRow:hover {
+            background: #e0e0e0;
+            cursor: pointer;
+        }
+    </style>
+
+<script type="text/javascript">
+$(function() {
+	// event 처리
+	$(".dataRow").click(function() {
+		// 한 줄 데이터를 클릭하면 질문답변 보기로 이동시킨다. - 번호 필요
+		let no = $(this).find(".no").text();
+		location = "view.do?no=" + no + "&${pageObject.pageQuery}"
+	});
+	
+});
+</script>
 </head>
 <body>
 <div class="container">

@@ -18,7 +18,7 @@ public class QnaController {
 		System.out.println("QnaController.execute() --------------------------");
 		// uri
 		String uri = request.getRequestURI();
-		
+		System.out.println("uri="+ uri);
 		Object result = null;
 		
 		String jsp = null;
@@ -82,7 +82,7 @@ public class QnaController {
 				
 				jsp = "board/view";
 				break;
-			case "/qna/questionForm.do":
+			case "/qna/qeustionForm.do":
 				System.out.println("3-1. 질문하기 등록 폼");
 				
 				request.setAttribute("headTitle", "질문하기 폼");
@@ -208,7 +208,7 @@ public class QnaController {
 			
 			// 예외객체를 jsp에서 사용하기 위해 request에 담는다.
 			request.setAttribute("e", e);
-			
+			e.printStackTrace();
 			jsp = "error/500";
 		} // end of try~catch
 		return jsp;

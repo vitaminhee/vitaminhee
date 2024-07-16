@@ -3,7 +3,7 @@ package com.webjjang.qna.vo;
 import lombok.Data;
 
 @Data
-public class QnaVO {
+public class QnaVO { // lib - lombok.jar
 
 	// private 변수
 	private Long no;

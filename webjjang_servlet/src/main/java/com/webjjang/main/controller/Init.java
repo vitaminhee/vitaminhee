@@ -136,21 +136,20 @@ public class Init {
 			
 			
 			// ---- [질문답변 객체 생성과 조립 ] -----------------------
-						// dao 생성
-						daoMap.put("qnaDAO", new QnaDAO());
-						// service 생성
-						serviceMap.put("/qna/list.do", new QnaListService());
-						serviceMap.put("/qna/view.do", new QnaViewService());
-						serviceMap.put("/qna/write.do", new QnaWriteService());
-						serviceMap.put("/qna/update.do", new QnaUpdateService());
-						serviceMap.put("/qna/delete.do", new QnaDeleteService());
-						
-						// 조립 dao->service
-						serviceMap.get("/qna/list.do").setDAO(daoMap.get("qnaDAO"));
-						serviceMap.get("/qna/view.do").setDAO(daoMap.get("qnaDAO"));
-						serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
-						serviceMap.get("/qna/update.do").setDAO(daoMap.get("qnaDAO"));
-						serviceMap.get("/qna/delete.do").setDAO(daoMap.get("qnaDAO"));
+			daoMap.put("qnaDAO", new QnaDAO());
+			// serivice 생성 
+			serviceMap.put("/qna/list.do", new QnaListService());
+			serviceMap.put("/notice/view.do", new NoticeViewService());
+			serviceMap.put("/qna/write.do", new QnaWriteService());
+			serviceMap.put("/notice/update.do", new NoticeUpdateService());
+			serviceMap.put("/notice/delete.do", new NoticeDeleteService());
+			// 조립 dao->service
+			serviceMap.get("/qna/list.do").setDAO(daoMap.get("qnaDAO"));
+			serviceMap.get("/notice/view.do").setDAO(daoMap.get("noticeDAO"));
+			serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
+			serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
+			serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));
+			
 			
 		System.out.println("Init.static 초기화 블록 ----- 객체 생성과 로딩 ------");
 	}

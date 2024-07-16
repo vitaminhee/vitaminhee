@@ -19,14 +19,14 @@ public class QnaWriteService implements Service {
 		QnaVO vo = (QnaVO) obj;
 		
 		Long no = dao.getNo();
-		vo.setNo(no);
+		vo.setNo(no); // no를 받아와서 세팅
 		
 		if(vo.isQuestion()) {
-			// 질문 - refNo를 no와 같은 번호 세팅한다.
+			// 질문 - refNo를 no와 같은 번호로 세팅한다.
 			vo.setRefNo(no);
 		} else {
 			// 답변 - refNo와 순서번호와 같거나 큰 데이터의 순서 번호를 1 증가 시켜준다.
-			dao.increaseOrdNo(vo);
+			dao.increaseOrdNo(vo); // 답변이 같은 경우
 		}
 		
 		// DB board에서 리스트 쿼리 실행해서 데이터 가져오기 - 리턴

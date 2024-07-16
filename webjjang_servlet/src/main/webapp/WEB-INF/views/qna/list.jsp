@@ -10,7 +10,7 @@
 
  <style type="text/css">
         .dataRow:hover {
-            background: #e0e0e0;
+            background: #e0e0e0; /* 마우스를 가져다 댔을 때 색상 변경*/
             cursor: pointer;
         }
     </style>
@@ -63,7 +63,7 @@ $(function() {
 
 		</table>
 		<c:if test="${!empty login }"> <!-- 로그인을 하면 -->
-		<a href="qeustionForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">질문</a>
+		<a href="questionForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">질문</a>
 		
 		</c:if>
 		</div>

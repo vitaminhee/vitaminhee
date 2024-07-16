@@ -139,13 +139,13 @@ public class Init {
 			daoMap.put("qnaDAO", new QnaDAO());
 			// serivice 생성 
 			serviceMap.put("/qna/list.do", new QnaListService());
-			serviceMap.put("/notice/view.do", new NoticeViewService());
+			serviceMap.put("/qna/view.do", new QnaViewService());
 			serviceMap.put("/qna/write.do", new QnaWriteService());
 			serviceMap.put("/notice/update.do", new NoticeUpdateService());
 			serviceMap.put("/notice/delete.do", new NoticeDeleteService());
 			// 조립 dao->service
 			serviceMap.get("/qna/list.do").setDAO(daoMap.get("qnaDAO"));
-			serviceMap.get("/notice/view.do").setDAO(daoMap.get("noticeDAO"));
+			serviceMap.get("/qna/view.do").setDAO(daoMap.get("qnaDAO"));
 			serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
 			serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
 			serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));

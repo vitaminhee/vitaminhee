@@ -37,7 +37,11 @@ import com.webjjang.notice.service.NoticeUpdateService;
 import com.webjjang.notice.service.NoticeViewService;
 import com.webjjang.notice.service.NoticeWriteService;
 import com.webjjang.qna.dao.QnaDAO;
+import com.webjjang.qna.service.QnaDeleteService;
 import com.webjjang.qna.service.QnaListService;
+import com.webjjang.qna.service.QnaUpdateService;
+import com.webjjang.qna.service.QnaViewService;
+import com.webjjang.qna.service.QnaWriteService;
 
 public class Init {
 
@@ -136,17 +140,17 @@ public class Init {
 						daoMap.put("qnaDAO", new QnaDAO());
 						// service 생성
 						serviceMap.put("/qna/list.do", new QnaListService());
-						serviceMap.put("/qna/view.do", new NoticeViewService());
-						serviceMap.put("/qna/write.do", new NoticeWriteService());
-						serviceMap.put("/qna/update.do", new NoticeUpdateService());
-						serviceMap.put("/qna/delete.do", new NoticeDeleteService());
+						serviceMap.put("/qna/view.do", new QnaViewService());
+						serviceMap.put("/qna/write.do", new QnaWriteService());
+						serviceMap.put("/qna/update.do", new QnaUpdateService());
+						serviceMap.put("/qna/delete.do", new QnaDeleteService());
 						
 						// 조립 dao->service
 						serviceMap.get("/qna/list.do").setDAO(daoMap.get("qnaDAO"));
-						serviceMap.get("/qna/view.do").setDAO(daoMap.get("noticeDAO"));
-						serviceMap.get("/qna/write.do").setDAO(daoMap.get("noticeDAO"));
-						serviceMap.get("/qna/update.do").setDAO(daoMap.get("noticeDAO"));
-						serviceMap.get("/qna/delete.do").setDAO(daoMap.get("noticeDAO"));
+						serviceMap.get("/qna/view.do").setDAO(daoMap.get("qnaDAO"));
+						serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
+						serviceMap.get("/qna/update.do").setDAO(daoMap.get("qnaDAO"));
+						serviceMap.get("/qna/delete.do").setDAO(daoMap.get("qnaDAO"));
 			
 		System.out.println("Init.static 초기화 블록 ----- 객체 생성과 로딩 ------");
 	}

@@ -33,6 +33,7 @@ import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
 import com.webjjang.message.dao.MessageDAO;
 import com.webjjang.message.service.MessageListService;
+import com.webjjang.message.service.MessageWriteService;
 import com.webjjang.notice.dao.NoticeDAO;
 import com.webjjang.notice.service.NoticeDeleteService;
 import com.webjjang.notice.service.NoticeListService;
@@ -161,13 +162,13 @@ public class Init {
 			// serivice 생성 
 			serviceMap.put("/message/list.do", new MessageListService());
 			serviceMap.put("/qna/view.do", new QnaViewService());
-			serviceMap.put("/qna/write.do", new QnaWriteService());
+			serviceMap.put("/message/write.do", new MessageWriteService());
 			serviceMap.put("/notice/update.do", new NoticeUpdateService());
 			serviceMap.put("/notice/delete.do", new NoticeDeleteService());
-						// 조립 dao->service
+			// 조립 dao->service
 			serviceMap.get("/message/list.do").setDAO(daoMap.get("messageDAO"));
 			serviceMap.get("/qna/view.do").setDAO(daoMap.get("qnaDAO"));
-			serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
+			serviceMap.get("/message/write.do").setDAO(daoMap.get("messageDAO"));
 			serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
 			serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));
 			

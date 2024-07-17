@@ -16,7 +16,7 @@
 		<span  class="float-right">
 			<button type="button" class="btn btn-success"
 			  data-toggle="modal" data-target="#sendModal">
-			  보내기
+			 send
 			</button>
 		</span>
 		<a href="list.do?mode=1&${pageObject.pageQuery }"
@@ -39,7 +39,7 @@
 					    <p>
 					    	번호 : ${vo.no }
 					    	/ 보낸 날짜 : ${vo.sendDate }
-					    	/ 읽은 날짜 : ${(empty vo.acceptDate)?"읽지 안음":vo.acceptDate }
+					    	/ 읽은 날짜 : ${(empty vo.acceptDate)?"읽지 않음":vo.acceptDate }
 					    </p>
 					  </div>
 					  <img src="${vo.accepterPhoto }"

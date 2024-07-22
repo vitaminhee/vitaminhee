@@ -85,6 +85,21 @@
 		});
 	});
 	</script>
+	
+	<c:if test="${!empty login }">
+	<!-- 로그인을 했을 때 새로운 메시지를 3초마다 불러와서 세팅해주는 처리 js -->
+	<script type="text/javascript">
+	$(function(){
+		setInterval(function(){
+			// 서버에서 새로운 메시지 데이터를 가져와서 새로운 메시지란에 표시함
+			//console.log("3초마다 자동 실행");
+			// 새로운 메시지 표시하는 곳을 선택해서 데이터를 올림
+			$("#NewMsgCnt").load("/ajax/getNewMsgCnt.do");
+		}, 3000); // 3초
+	});
+	</script>
+	</c:if>
+	
 </head>
 <body>
 	<header>
@@ -169,7 +184,7 @@
 			  	<!-- 새로운 메시지 처리 -->
 			    <li class="nav-item">
 			      <span class="nav-link">
-			      	<span class="badge badge-pill badge-danger">
+			      	<span class="badge badge-pill badge-danger" id="newMsgCnt">
 			      		${login.newMsgCnt}
 			      	</span>
 			      </span>

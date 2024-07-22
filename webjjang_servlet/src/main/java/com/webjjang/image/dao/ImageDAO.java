@@ -174,7 +174,7 @@ public class ImageDAO extends DAO{
 		
 		// 결과 데이터를 리턴해 준다.
 		return result;
-	} // end of increase()
+	} // end of write()
 	
 	
 	// 4. 글수정 처리

@@ -2,8 +2,10 @@ package com.webjjang.ajax.controller;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.webjjang.main.controller.Init;
+import com.webjjang.member.vo.LoginVO;
 import com.webjjang.util.exe.Execute;
 
 
@@ -11,7 +13,7 @@ import com.webjjang.util.exe.Execute;
 public class AjaxController {
 
 	public String execute(HttpServletRequest request) {
-		System.out.println("MemberController.execute() --------------------------");
+		System.out.println("AjaxController.execute() --------------------------");
 		
 		// login된 정보 중에서 id를 많이 사용한다.
 		String id = null;
@@ -20,6 +22,13 @@ public class AjaxController {
 		String uri = request.getRequestURI();
 		
 		String jsp = null; // return 되는 jsp 정보
+		
+		// session 꺼내기
+		HttpSession session = request.getSession(); 
+		
+		// 로그인 정보 꺼내기
+		LoginVO loginVO = (LoginVO) session.getAttribute("login");
+		if(loginVO !=null) id = loginVO.getId(); // loginvo가 null이 아니면 id를 꺼내오자
 	
 		try { // 정상 처리
 		
@@ -41,6 +50,25 @@ public class AjaxController {
 				
 				// jsp 정보. ajax는 오류 발생 시 보이지 않는 문제... 경로 잘 찾기
 				jsp = "ajax/checkId";
+				
+				break;
+				
+			case "/ajax/getNewMsgCnt.do":
+				System.out.println("2. 새로운 메시지 가져오기");
+				
+				
+				// id는 세션에서 받아야함
+				
+				
+				// 서버에서 가져온 id
+				// [AjaxController] - MemberNewMsgCntService - MemberDAO.getNewMsgCnt(id)
+				Long result = (Long) Execute.execute(Init.get(uri), id); // long 타입으로 캐스팅
+				
+				request.setAttribute("NewMsgCnt", result);
+				// 데이터 수집 id와 서버에서 가져온 id는 당연히 다름.
+				
+				// jsp 정보. ajax는 오류 발생 시 보이지 않는 문제... 경로 잘 찾기
+				jsp = "member/NewMsgCnt";
 				
 				break;
 				

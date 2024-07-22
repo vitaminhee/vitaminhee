@@ -49,8 +49,7 @@
 		<filter-name>authority</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-	
-	
+
 	<filter>
 		<filter-name>conUpdate</filter-name>
 		<filter-class>com.webjjang.util.filter.UpdateConDateFilter</filter-class>

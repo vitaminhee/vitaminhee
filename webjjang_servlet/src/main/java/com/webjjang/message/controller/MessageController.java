@@ -8,7 +8,6 @@ import com.webjjang.main.controller.Init;
 import com.webjjang.member.vo.LoginVO;
 import com.webjjang.message.vo.MessageVO;
 import com.webjjang.util.page.PageObject;
-import com.webjjang.util.page.ReplyPageObject;
 import com.webjjang.util.exe.Execute;
 
 // Message Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
@@ -63,32 +62,36 @@ public class MessageController {
 				// /WEB-INF/views/ + message/list + .jsp
 				jsp = "message/list";
 				break;
-			case "/board/view.do":
-				System.out.println("2.일반게시판 글보기");
-				// 1. 조회수 1증가(글보기), 2. 일반게시판 글보기 데이터 가져오기 : 글보기, 글수정
-				// 넘어오는 글번호와 조회수 1증가를 수집한다.(request에 들어 있다.)
+				
+			case "/message/view.do":
+				System.out.println("2.메시지 보기");
+				
 				String strNo = request.getParameter("no");
 				no = Long.parseLong(strNo);
-				String strInc = request.getParameter("inc");
-				Long inc = Long.parseLong(strInc);
-				// 전달 데이터 - 글번호, 조회수 증가 여부(1:증가, 0:증가 안함) : 배열 또는 Map
-				result = Execute.execute(Init.get(uri),
-						new Long[]{no, inc});
+				
+				MessageVO vo = new MessageVO();
+				vo.setNo(no);
+				
+				// 받은 메시지인지 확인하는 처리
+				if(request.getParameter("accept").equals("1"))
+					vo.setAccepterId(id);
+				
+				result = Execute.execute(Init.get(uri),vo);
+				
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
 				
-				// 댓글 페이지 객체
-				// 데이터 전달 - page / perPageNum / no / replyPage / replyPerPageNum 
-				ReplyPageObject replyPageObject 
-					= ReplyPageObject.getInstance(request);
-				// 가져온 댓글 데이터 request에 담기
-				request.setAttribute("replyList",
-						Execute.execute(Init.get("/boardreply/list.do"),replyPageObject));
-				// 댓글 페이지 객체 담기
-				request.setAttribute("replyPageObject", replyPageObject);
 				
-				jsp = "board/view";
+				// jsp에서 보여지는 새로운 메시지를 다시 불러와서 session에 넣는다.
+				loginVO.setNewMsgCnt(
+						(Long) Execute.execute(Init.get("/ajax/getNewMsgCnt.do"), id));
+				
+				// 페이지 정보 - 리스트로 돌아갈 때 필요
+				request.setAttribute("pageObject", PageObject.getInstance(request));
+				
+				jsp = "message/view";
 				break;
+				
 			// writeForm은 리스트의 모달 창으로 대신 작성했다.
 			case "/message/write.do":
 				System.out.println("3. 메시지 등록 처리");
@@ -98,7 +101,7 @@ public class MessageController {
 				String content = request.getParameter("content");
 				
 				// 변수 - vo 저장하고 Service
-				MessageVO vo = new MessageVO();
+				vo = new MessageVO();
 				vo.setContent(content);
 				vo.setAccepterId(accepterId);
 				vo.setSenderId(id); // 보내는 사람은 본인이다.
@@ -115,6 +118,7 @@ public class MessageController {
 						+ request.getParameter("perPageNum");
 				
 				break;
+				
 			case "/board/updateForm.do":
 				System.out.println("4-1.일반게시판 글수정 폼");
 				
@@ -131,6 +135,7 @@ public class MessageController {
 				jsp = "board/updateForm";
 				
 				break;
+				
 			case "/board/update.do":
 				System.out.println("4-2.일반게시판 글수정 처리");
 				

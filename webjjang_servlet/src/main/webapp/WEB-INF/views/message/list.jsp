@@ -7,6 +7,27 @@
 <head>
 <meta charset="UTF-8">
 <title>message list</title>
+
+<style type="text/css">
+.dataRow:hover{
+background: #e0e0e0;
+cursor: pointer;
+}
+</style>
+
+<script type="text/javascript">
+$(function() {
+	// event 처리
+	$(".dataRow").click(function() {
+		let no = $(this).find(".no").text();
+		let accept = $(this).data("accept"); // data-accept = value를 받아내기 위해서 사용
+		//alert(no);
+		location="view.do?no=" + no 
+				+ "&mode=${pageObject.acceptMode}&${pageObject.pageQuery}&accept="+accept ;
+	});
+});
+</script>
+
 </head>
 <body>
 <div class="container">
@@ -16,8 +37,7 @@
 		<span  class="float-right">
 			<button type="button" class="btn btn-success"
 			  data-toggle="modal" data-target="#sendModal">
-			 send
-			</button>
+			 send</button>
 		</span>
 		<a href="list.do?mode=1&${pageObject.pageQuery }"
 		 class="btn btn-primary">받은 message</a>
@@ -30,14 +50,16 @@
 		<c:if test="${ empty list }">message가 존재하지 않습니다.</c:if>
 		<c:if test="${ !empty list }">
 			<c:forEach items="${list }" var="vo">
-				<div class="media border p-3 dataRow">
+			<!-- dataRow에서 클릭해서 사용 -->
+				<div class="media border p-3 dataRow" 
+				data-accept="${(vo.senderId == login.id)?0:1 }">  <!-- 보낸 사람이 맞으면 accept가 0 -->
 					<c:if test="${vo.senderId == login.id }">
 						<!-- 보낸 사람이면 받는 사람의 정보만 표시한다. 오른쪽 정렬 -->
 					  <div class="media-body text-right ${(empty vo.acceptDate)?'font-weight-bold':'' }">
 				    	${vo.accepterName }
 				    	<small><i>(${vo.accepterId })</i></small>
 					    <p>
-					    	번호 : ${vo.no }
+					    	번호 : <span class="no">${vo.no }</span>
 					    	/ 보낸 날짜 : ${vo.sendDate }
 					    	/ 읽은 날짜 : ${(empty vo.acceptDate)?"읽지 않음":vo.acceptDate }
 					    </p>
@@ -54,7 +76,7 @@
 				    	${vo.senderName }
 				    	<small><i>(${vo.senderId })</i></small>
 					    <p>
-					    	번호 : ${vo.no }
+					    	번호 : <span class="no">${vo.no }</span>
 					    	/ 보낸 날짜 : ${vo.sendDate }
 					    	/ 읽은 날짜 : ${(empty vo.acceptDate)?"읽지 않음":vo.acceptDate }
 					    </p>
